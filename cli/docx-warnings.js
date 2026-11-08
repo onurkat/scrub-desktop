@@ -12,6 +12,8 @@ export function docxWarnings(skipped = []) {
       notices.push(["docxFields", n]);
     else if (message.startsWith("tracked changes present"))
       notices.push(["docxTracked"]);
+    else if (/^\d+ mailto: hyperlink targets kept/.test(message))
+      notices.push(["docxMailKept", n]);
     else if (/^\d+ mailto:/.test(message))
       notices.push(["docxMailReplaced", n]);
     else if (message.startsWith("mailto: hyperlink targets kept")) {

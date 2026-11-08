@@ -325,6 +325,38 @@ function pack(parts) {
     { level: 6 },
   );
 }
+// Resolve OPC relationship ownership instead of assuming a flat word/_rels directory.
+function relationshipParts(doc) {
+  const inspected = new Set(doc.models.map((m) => m.name));
+  const handled = [],
+    unhandled = [];
+  for (const name of Object.keys(doc.parts).sort()) {
+    if (!name.startsWith("word/") || !name.endsWith(".rels")) continue;
+    const match = /^(word\/(?:[^/]+\/)*)_rels\/([^/]+)\.rels$/.exec(name);
+    const owner = match && match[1] + match[2];
+    (owner && inspected.has(owner) ? handled : unhandled).push(name);
+  }
+  return { handled, unhandled };
+}
+function mapMailTargets(xml, transform) {
+  if (/<!DOCTYPE|<!ENTITY/i.test(xml))
+    throw new Error("DOCX relationship entities/DTDs are unsupported.");
+  let index = 0;
+  return xml.replace(
+    /\bTarget\s*=\s*("[^"]*"|'[^']*')/g,
+    (attribute, quoted) => {
+      const raw = quoted.slice(1, -1);
+      if (!/^mailto:/i.test(decode(raw))) return attribute;
+      const replacement = transform(raw, index++);
+      return (
+        attribute.slice(0, attribute.indexOf(quoted)) +
+        quoted[0] +
+        replacement +
+        quoted[0]
+      );
+    },
+  );
+}
 export function scrubDocx(bytes, policy = {}) {
   const doc = loadDocx(bytes),
     result = scrubText(doc.text, policy);
@@ -445,44 +477,83 @@ export function scrubDocx(bytes, policy = {}) {
       skipped.push("people.xml: reviewer account identifiers removed");
     }
   }
-  // Hyperlink targets (mailto:) and document properties carry identities outside the text model.
-  const byValue = new Map(
-    Object.entries(result.mapping.placeholders).map(([p, e]) => [
-      e.value.toLowerCase(),
-      p,
-    ]),
-  );
-  let rels = 0;
-  for (const name of Object.keys(doc.parts))
-    if (/^word\/_rels\/.*\.rels$/.test(name)) {
-      const xml = strFromU8(doc.parts[name]);
-      const out = xml.replace(
-        /Target="mailto:([^"?]+)([^"]*)"/g,
-        (all, addr, rest) => {
-          const p = byValue.get(decode(addr).toLowerCase());
-          if (!p) return all;
-          rels++;
-          return 'Target="mailto:' + p + '"';
+  // Handle mail targets of every inspected part, including nested glossary relationships.
+  const relationships = relationshipParts(doc);
+  let rels = 0,
+    keptMail = 0;
+  for (const name of relationships.handled) {
+    const xml = strFromU8(doc.parts[name]);
+    const out = mapMailTargets(xml, (raw, index) => {
+      const target = decode(raw);
+      let payload;
+      try {
+        payload = decodeURIComponent(target.slice(7));
+      } catch {
+        throw new Error("Malformed DOCX mailto target encoding.");
+      }
+      // URI separators are not email local-part characters in this context.
+      const question = payload.indexOf("?");
+      const segments = [
+        {
+          start: 0,
+          value: payload.slice(0, question < 0 ? payload.length : question),
         },
+      ];
+      if (question >= 0)
+        for (const m of payload
+          .slice(question)
+          .matchAll(/[?&][^=&?]*=([^&]*)/g))
+          segments.push({
+            start: question + m.index + m[0].length - m[1].length,
+            value: m[1],
+          });
+      const manual = segments.flatMap((segment) =>
+        scrubText(segment.value, {
+          detectors: { ...detectors, email: true },
+        }).matches.map((m) => ({
+          start: segment.start + m.start,
+          end: segment.start + m.end,
+          category: m.category,
+        })),
       );
-      if (out !== xml) doc.parts[name] = strToU8(out);
-    }
+      const cleaned = scrubText(payload, {
+        mapping: result.mapping,
+        detectors,
+        manual,
+      });
+      Object.assign(result.mapping.placeholders, cleaned.mapping.placeholders);
+      if (!cleaned.matches.length) {
+        if (!/^\[EMAIL_\d+\]$/.test(payload)) keptMail++;
+        return raw;
+      }
+      const value = encode(target.slice(0, 7) + cleaned.output)
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&apos;");
+      (result.mapping.docxRelationships ||= []).push({
+        part: name,
+        index,
+        outputHash: textHash(value),
+        value: raw,
+      });
+      rels++;
+      return value;
+    });
+    if (out !== xml) doc.parts[name] = strToU8(out);
+  }
   if (rels)
     skipped.push(
       rels +
         " mailto: hyperlink targets replaced with placeholders (links no longer open a mail client)",
     );
-  const keptMail = [];
-  for (const name of Object.keys(doc.parts))
-    if (/^word\/_rels\/.*\.rels$/.test(name))
-      for (const t of strFromU8(doc.parts[name]).matchAll(
-        /Target="mailto:([^"?]+)/g,
-      ))
-        keptMail.push(decode(t[1]));
-  if (keptMail.length)
+  if (keptMail)
     skipped.push(
-      "mailto: hyperlink targets kept (address not in the text): " +
-        [...new Set(keptMail)].join(", "),
+      keptMail +
+        " mailto: hyperlink targets kept (unrecognised addresses; inspect before sharing)",
+    );
+  if (relationships.unhandled.length)
+    skipped.push(
+      relationships.unhandled.length +
+        " relationship parts belonging to uninspected content not inspected",
     );
   // Reviewer identities that matched nothing stay in Word's margin: say so, with the names, so they can be added to the dictionary.
   const keptAuthors = new Set();
@@ -599,6 +670,30 @@ export function restoreDocx(bytes, mapping) {
     }
     doc.parts[model.name] = strToU8(
       replaceXML({ ...model, nodes }, replacements),
+    );
+  }
+  for (const name of relationshipParts(doc).handled) {
+    const xml = strFromU8(doc.parts[name]);
+    doc.parts[name] = strToU8(
+      mapMailTargets(xml, (raw, index) => {
+        const saved = mapping.docxRelationships?.find(
+          (v) =>
+            v.part === name &&
+            v.index === index &&
+            v.outputHash === textHash(raw),
+        );
+        if (saved)
+          return encode(decode(saved.value))
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&apos;");
+        const restored = restoreDetailed(decode(raw), mapping);
+        restored.unknown.forEach((p) => unknown.add(p));
+        return restored.output === decode(raw)
+          ? raw
+          : encode(restored.output)
+              .replace(/"/g, "&quot;")
+              .replace(/'/g, "&apos;");
+      }),
     );
   }
   return { output: pack(doc.parts), unknown: [...unknown] };

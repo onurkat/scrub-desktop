@@ -1,12 +1,12 @@
 {
   "repository": "https://github.com/onurkat/scrub",
-  "commit": "eee8f69888d9896d213644dcb0e2047174ae5af3",
+  "commit": "95c22e219555d0c5281cd831c26f7d6077a6a7ff",
   "files": {
     "detect.js": "1056fb8e2327d0dc58e3218af808ee350bf7fc765976034bf91bbe0f2f06bcf6",
     "dictionary.js": "d830fb9cc74dac668b5a958f1d241d29fe1c1f66ef9fb9c8a7699c092d681ecb",
     "scrub.js": "39ec3119ad6d8c81513eadaf286a8eb22927347d354a58ec2703368d423b2713",
     "restore.js": "ac7ba3f55ea203206ca6b5c92572460430872fec37c2e32516cdc4ecda93822f",
     "report.js": "35d1ced631a998f26a1671f07a9993758df1b8bb1d14c6f91dad5085e65a98aa",
-    "docx.js": "ca628c54e556d4db05e1f7dcf1fa9ef73aab7f0bbb4bb6c778404b323028d6d6"
+    "docx.js": "b83545188fc874069a7955241ca1acb8c7b12543d96a4867315f7fa0594fbe35"
   }
 }

@@ -59,3 +59,12 @@ test("CLI warns in selected language before any output or mapping and requires e
   assert(existsSync(out));
   assert(existsSync(map));
 });
+
+test("numeric retained mail diagnostics preserve counts without showing targets", () => {
+  assert.deepEqual(
+    docxWarnings([
+      "3 mailto: hyperlink targets kept (unrecognised addresses; inspect before sharing)",
+    ]),
+    [["docxMailKept", 3]],
+  );
+});

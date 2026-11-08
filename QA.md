@@ -104,3 +104,7 @@ Validation: Node 20 and Node 22 `npm test` each pass 14/14, including upstream p
 ### AUDIT-007 engine sync
 
 Engine updated to eee8f69: field instruction values now scrub/restore and every inspected part validates namespace bindings. Node 20 and 22 each pass all 14 tests, including upstream byte parity; `tools/qa/documents.mjs` passes save approval/cancellation and restore after the sync. The earlier warning-delivery note about opaque field instructions is superseded by this revision: unrecognised/unmapped field content still carries a conservative notice.
+
+### Glossary relationship sync
+
+Engine synced from 95c22e2. Nested relationships now scrub/restore visible and target-only mail addresses; unhandled owners and unrecognised targets are reported. Numeric retained-mail diagnostics use the existing translated count key, with a regression assertion. Node 20/22 each pass 15/15 tests (including upstream parity); Documents save/restore QA passes after sync.

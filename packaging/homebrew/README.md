@@ -4,13 +4,13 @@ The formulas refer to an unpublished release artifact. Nothing has been uploaded
 The prepared source archive is reproducible with:
 
 ```sh
-git archive --format=tar.gz --prefix=scrub-desktop-1.0.2/ \
-  -o scrub-desktop-1.0.2-source.tar.gz 8b2ccb2
-sha256sum scrub-desktop-1.0.2-source.tar.gz
+git archive --format=tar.gz --prefix=scrub-desktop-1.0.3/ \
+  -o scrub-desktop-1.0.3-source.tar.gz 86788ed
+sha256sum scrub-desktop-1.0.3-source.tar.gz
 ```
 
-Expected SHA-256: `0712988848c32a514631a2651f9f86d15316d0a4c74707e910eb5725a224ca32`.
-The owner must attach that exact archive to the v1.0.2 release before the public
+Expected SHA-256: `7b0fba82a255682f554e477f7bb7d93333849e1e8cf614d16fd2665f432fd4f6`.
+The owner must attach that exact archive to the v1.0.3 release before the public
 formulas can install. If application code changes, regenerate the archive and
 update both checksums before publishing. Formula metadata may be maintained in
 later commits without changing the archived application source.

@@ -1,0 +1,1 @@
+{"identifier":"main","description":"Local Scrub window event access only; file operations use native chooser commands.","windows":["main"],"permissions":["core:default"]}

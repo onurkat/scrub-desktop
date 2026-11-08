@@ -1,0 +1,12 @@
+Contact alice@example.com or bob@example.de.
+Phone: +44 7700 900123
+Tel: 020 7946 0958
+GSM: +90 532 123 4567
+IBAN GB82 WEST 1234 5698 7654 32
+Card 4111 1111 1111 1111
+SSN 123-45-6789
+TCKN 10000000146
+Keys sk-abcdefghijklmnopqrstuvwxyz and ghp_abcdefghijklmnopqrstuvwxyz
+JWT eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.signatureabcdefgh
+Address: 12 Baker Street, London
+Mehmet'in ACME's report.

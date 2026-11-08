@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <title>Scrub</title>
+    <link rel="stylesheet" href="css/app.css" />
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body>
+    <header>
+      <div class="brand">
+        <span class="logo" aria-hidden="true">S</span><strong>scrub</strong>
+      </div>
+      <span data-i18n="tier"></span>
+    </header>
+    <main>
+      <section id="welcome" hidden class="welcome">
+        <h1 data-i18n="welcomeTitle"></h1>
+        <p data-i18n="welcomeClipboard"></p>
+        <p data-i18n="welcomeDictionary"></p>
+        <div class="actions">
+          <button id="sample" data-i18n="trySample"></button
+          ><button id="dismiss-welcome" data-i18n="gotIt"></button>
+        </div>
+      </section>
+      <nav role="tablist" data-i18n-attr="aria-label:navLabel">
+        <button
+          role="tab"
+          id="tab-scrub"
+          aria-controls="scrub"
+          aria-selected="true"
+          data-i18n="tabScrub"
+        ></button
+        ><button
+          role="tab"
+          id="tab-restore"
+          aria-controls="restore"
+          aria-selected="false"
+          tabindex="-1"
+          data-i18n="tabRestore"
+        ></button
+        ><button
+          role="tab"
+          id="tab-dictionary"
+          aria-controls="dictionary"
+          aria-selected="false"
+          tabindex="-1"
+          data-i18n="tabDictionary"
+        ></button
+        ><button
+          role="tab"
+          id="tab-documents"
+          aria-controls="documents"
+          aria-selected="false"
+          tabindex="-1"
+          data-i18n="tabDocuments"
+        ></button
+        ><button
+          role="tab"
+          id="tab-settings"
+          aria-controls="settings"
+          aria-selected="false"
+          tabindex="-1"
+          data-i18n="tabSettings"
+        ></button>
+      </nav>
+      <p id="status" role="status" aria-live="polite"></p>
+      <section id="scrub" role="tabpanel" aria-labelledby="tab-scrub">
+        <div class="heading">
+          <div>
+            <h1 data-i18n="scrubHeading"></h1>
+            <p data-i18n="scrubIntro"></p>
+            <p id="review-count" aria-live="polite"></p>
+          </div>
+          <button id="open-full" data-i18n="actionTitle"></button>
+        </div>
+        <label for="input" data-i18n="originalLabel"></label
+        ><textarea
+          id="input"
+          rows="5"
+          data-i18n-attr="placeholder:originalPlaceholder"
+        ></textarea>
+        <div class="actions" id="compose-actions">
+          <button id="run" class="primary" data-i18n="scrubButton"></button
+          ><button id="from-clipboard" data-i18n="scrubClipboard"></button>
+        </div>
+        <div id="review" hidden>
+          <h2 data-i18n="detectedHeading"></h2>
+          <div id="matches"></div>
+          <h2 data-i18n="readyHeading"></h2>
+          <pre id="output" tabindex="0"></pre>
+          <details>
+            <summary data-i18n="originalLabel"></summary>
+            <div id="highlights"></div>
+          </details>
+          <div class="actions sticky" id="review-actions">
+            <button id="copy" class="primary" data-i18n="copyScrubbed"></button>
+            <button id="cancel" data-i18n="barCancel"></button>
+            <button id="new-conversation" data-i18n="newConversation"></button>
+          </div>
+        </div>
+      </section>
+      <section
+        id="restore"
+        role="tabpanel"
+        aria-labelledby="tab-restore"
+        hidden
+      >
+        <h1 data-i18n="restoreHeading"></h1>
+        <p data-i18n="restoreHelp"></p>
+        <label for="recent" data-i18n="recentLabel"></label
+        ><select id="recent"></select
+        ><label for="answer" data-i18n="answerLabel"></label
+        ><textarea id="answer" rows="6"></textarea>
+        <div class="actions">
+          <button
+            id="restore-run"
+            class="primary"
+            data-i18n="restoreButton"
+          ></button
+          ><button id="restore-clipboard" data-i18n="restoreClipboard"></button>
+        </div>
+        <p id="unknown"></p>
+        <pre id="restored" hidden tabindex="0"></pre>
+        <button id="copy-restored" hidden data-i18n="copyRestored"></button>
+      </section>
+      <section
+        id="dictionary"
+        role="tabpanel"
+        aria-labelledby="tab-dictionary"
+        hidden
+      >
+        <h1 data-i18n="dictionaryHeading"></h1>
+        <p data-i18n="dictionaryIntro"></p>
+        <label for="dictionary-search" data-i18n="searchTerms"></label
+        ><input id="dictionary-search" type="search" />
+        <div class="actions">
+          <button id="import-csv" data-i18n="importCsv"></button
+          ><button id="export-csv" data-i18n="exportCsv"></button>
+        </div>
+        <div id="form-home"></div>
+        <form id="dictionary-form">
+          <label for="term" data-i18n="termLabel"></label
+          ><input id="term" required /><label
+            for="category"
+            data-i18n="categoryLabel"
+          ></label
+          ><select id="category">
+            <option value="PERSON" data-i18n="categoryPerson"></option>
+            <option value="ORG" data-i18n="categoryOrg"></option>
+            <option value="TERM" data-i18n="categoryTerm"></option></select
+          ><label for="aliases" data-i18n="aliasesLabel"></label
+          ><input id="aliases" aria-describedby="alias-help" />
+          <p id="alias-help" class="hint" data-i18n="aliasesHelp"></p>
+          <div id="alias-chips" class="chips"></div>
+          <div class="actions">
+            <button type="submit" data-i18n="saveTerm"></button
+            ><button
+              type="button"
+              id="edit-cancel"
+              hidden
+              data-i18n="barCancel"
+            ></button>
+          </div>
+        </form>
+        <div id="dictionary-list"></div>
+      </section>
+      <section
+        id="documents"
+        role="tabpanel"
+        aria-labelledby="tab-documents"
+        hidden
+      >
+        <h1 data-i18n="tabDocuments"></h1>
+        <p data-i18n="documentHint"></p>
+        <div id="drop-zone" tabindex="0">
+          <button
+            id="choose-document"
+            class="primary"
+            data-i18n="chooseDocument"
+          ></button
+          ><span id="document-name"></span
+          ><input
+            id="document-drop"
+            type="file"
+            accept=".docx,.txt,.csv,.md"
+            hidden
+          />
+        </div>
+        <div class="actions">
+          <button id="document-scrub" disabled data-i18n="scrubButton"></button
+          ><button id="choose-mapping" data-i18n="chooseMapping"></button
+          ><button
+            id="document-restore"
+            disabled
+            data-i18n="restoreDocument"
+          ></button>
+        </div>
+        <pre id="document-preview" hidden tabindex="0"></pre>
+        <div class="actions">
+          <button id="document-save" hidden data-i18n="saveDocument"></button
+          ><button id="mapping-save" hidden data-i18n="exportMapping"></button>
+        </div>
+      </section>
+      <section
+        id="settings"
+        role="tabpanel"
+        aria-labelledby="tab-settings"
+        hidden
+      >
+        <h1 data-i18n="settingsHeading"></h1>
+        <fieldset>
+          <legend data-i18n="shortcutLabel"></legend>
+          <label for="scrub-shortcut" data-i18n="scrubClipboard"></label
+          ><input id="scrub-shortcut" readonly /><label
+            for="restore-shortcut"
+            data-i18n="restoreClipboard"
+          ></label
+          ><input id="restore-shortcut" readonly /><button
+            id="save-shortcuts"
+            data-i18n="settingsSave"
+          ></button>
+          <div id="wayland" hidden>
+            <p data-i18n="waylandHelp"></p>
+            <code>scrub-desktop --scrub-clipboard</code
+            ><code>scrub-desktop --restore-clipboard</code>
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend data-i18n="detectionOptions"></legend>
+          <p data-i18n="detectionHelp"></p>
+          <div id="detectors"></div>
+        </fieldset>
+        <label class="check"
+          ><input id="skip-review" type="checkbox" /><span
+            data-i18n="skipReview"
+          ></span></label
+        ><label class="check"
+          ><input id="keep-mappings" type="checkbox" /><span
+            data-i18n="keepMappings"
+          ></span
+        ></label>
+        <p class="hint" data-i18n="privacyStorage"></p>
+        <button id="clear-mappings" data-i18n="clearAll"></button
+        ><label class="check"
+          ><input id="autostart" type="checkbox" /><span
+            data-i18n="autostart"
+          ></span></label
+        ><label for="language" data-i18n="language"></label
+        ><select id="language"></select>
+        <h2 data-i18n="about"></h2>
+        <p>Scrub <span id="version"></span> · GPL-3.0-or-later</p>
+        <p>
+          <a href="https://github.com/onurkat/scrub-desktop"
+            >github.com/onurkat/scrub-desktop</a
+          ><br /><a href="mailto:onur@okteknoloji.com">onur@okteknoloji.com</a
+          ><br /><a
+            href="https://github.com/sponsors/onurkat"
+            data-i18n="sponsor"
+          ></a>
+        </p>
+      </section>
+    </main>
+    <footer data-i18n="footer"></footer>
+    <dialog id="confirmation">
+      <p id="confirmation-text"></p>
+      <div class="actions">
+        <button id="confirm-no" data-i18n="barCancel"></button
+        ><button id="confirm-yes" data-i18n="delete"></button>
+      </div>
+    </dialog>
+  </body>
+</html>

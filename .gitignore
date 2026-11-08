@@ -1,0 +1,14 @@
+node_modules/
+src-tauri/target/
+dist/
+.artifacts/
+*.tgz
+ui/engine/
+ui/vendor/
+ui/js/locales.js
+AGENTS.md
+SPEC.md
+ACCEPTANCE.md
+STATUS.md
+QUESTIONS.md
+audit/

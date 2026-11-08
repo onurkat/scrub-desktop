@@ -1,0 +1,70 @@
+import assert from "node:assert/strict";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
+import { browser, bridge } from "./browser.mjs";
+import { serve } from "./server.mjs";
+const server = await serve(),
+  b = await browser();
+const results = [];
+await mkdir("qa/screens", { recursive: true });
+try {
+  for (const file of (await readdir("locales")).filter(
+    (f) => f.endsWith(".json") && !f.startsWith("_"),
+  )) {
+    const lang = file.slice(0, -5),
+      dict = JSON.parse(await readFile("locales/" + file, "utf8"));
+    for (const width of [480, 800]) {
+      const page = await b.newPage({ viewport: { width, height: 720 } });
+      const errors = [];
+      page.on("pageerror", (e) => errors.push(e.message));
+      await bridge(page);
+      await page.addInitScript((code) => {
+        qa.settings.language = code;
+      }, lang);
+      await page.goto(server.url);
+      await page.waitForFunction(() => window.qa.action);
+      for (const view of [
+        "scrub",
+        "restore",
+        "dictionary",
+        "documents",
+        "settings",
+      ]) {
+        await page.locator("#tab-" + view).click();
+        if (view === "scrub") {
+          await page.locator("#input").fill("alex@example.com +44 7700 900123");
+          await page.locator("#run").click();
+        }
+        const overflow = await page.evaluate(
+          () => document.documentElement.scrollWidth > innerWidth,
+        );
+        assert.equal(overflow, false, `${lang}/${width}/${view}: overflow`);
+        assert.equal(
+          await page.locator("#tab-" + view).textContent(),
+          dict["tab" + view[0].toUpperCase() + view.slice(1)],
+        );
+        results.push({ lang, width, view, overflow });
+        if (width === 800 && ["en", "de", "ar"].includes(lang)) {
+          for (const mode of ["light", "dark"]) {
+            await page.emulateMedia({ colorScheme: mode });
+            await page.screenshot({
+              path: `qa/screens/${lang}-${view}-${mode}.png`,
+              fullPage: true,
+            });
+          }
+        }
+      }
+      assert.deepEqual(errors, [], lang);
+      await page.close();
+    }
+  }
+  await writeFile(
+    "qa/i18n-layout.json",
+    JSON.stringify(results, null, 2) + "\n",
+  );
+  console.log(
+    `${results.length} localized views passed at 480/800 pixels; 30 screenshots saved.`,
+  );
+} finally {
+  await b.close();
+  server.close();
+}

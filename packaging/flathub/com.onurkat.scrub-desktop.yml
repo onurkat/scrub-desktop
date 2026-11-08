@@ -1,0 +1,29 @@
+app-id: com.onurkat.scrub-desktop
+runtime: org.gnome.Platform
+runtime-version: '49'
+sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+  - org.freedesktop.Sdk.Extension.node22
+command: scrub-desktop
+finish-args:
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --device=dri
+  - --talk-name=org.kde.StatusNotifierWatcher
+  - --talk-name=org.freedesktop.Notifications
+build-options:
+  append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/node22/bin
+  env:
+    CARGO_HOME: /run/build/scrub-desktop/cargo
+modules:
+  - name: scrub-desktop
+    buildsystem: simple
+    build-commands:
+      - npm ci --offline
+      - node tools/prepare-ui.js
+      - cargo build --manifest-path src-tauri/Cargo.toml --release --offline
+      - install -Dm755 src-tauri/target/release/scrub-desktop /app/bin/scrub-desktop
+    sources:
+      - type: dir
+        path: ../..

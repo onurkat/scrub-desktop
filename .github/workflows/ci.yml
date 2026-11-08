@@ -1,0 +1,74 @@
+name: Build and verify
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, macos-14, windows-2022]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: clippy,rustfmt
+      - name: Linux build dependencies
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libwebkit2gtk-4.1-dev build-essential libayatana-appindicator3-dev librsvg2-dev patchelf xclip xvfb
+      - run: npm ci
+      - run: npm test
+      - run: cargo test --manifest-path src-tauri/Cargo.toml --locked
+      - run: cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
+      - name: Linux bundles
+        if: runner.os == 'Linux'
+        run: npx tauri build --bundles appimage,deb
+      - name: macOS application
+        if: runner.os == 'macOS'
+        run: npx tauri build --bundles app
+      - name: Windows executable
+        if: runner.os == 'Windows'
+        run: npx tauri build --no-bundle
+      - name: Linux clipboard self-test
+        if: runner.os == 'Linux'
+        env:
+          SCRUB_BINARY: src-tauri/target/release/scrub-desktop
+        run: xvfb-run -a bash tools/qa/self-test.sh
+      - name: Local Homebrew source builds
+        if: runner.os == 'macOS'
+        run: |
+          mkdir -p .artifacts
+          node tools/qa/local-tap.mjs
+          brew install --build-from-source scrub/local/scrub
+          brew install --build-from-source scrub/local/scrub-desktop
+          brew test scrub/local/scrub
+          printf 'previous-clipboard' | pbcopy
+          scrub-desktop --self-test
+          test "$(pbpaste)" = previous-clipboard
+          if xattr -p com.apple.quarantine "$(brew --prefix scrub-desktop)/Scrub.app"; then exit 1; fi
+          brew style scrub/local/scrub scrub/local/scrub-desktop
+          brew audit --strict scrub/local/scrub scrub/local/scrub-desktop
+      - name: MSIX unsigned package and CI-only signed install
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          Set-Clipboard -Value 'previous-clipboard'
+          ./packaging/msstore/build.ps1 -TestInstall
+          if ((Get-Clipboard -Raw).TrimEnd() -ne 'previous-clipboard') { throw 'Clipboard was not restored' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scrub-${{ matrix.os }}
+          path: |
+            src-tauri/target/release/bundle/
+            .artifacts/Scrub-unsigned.msix
+          if-no-files-found: error
+  workflow-lint:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker://rhysd/actionlint:1.7.12

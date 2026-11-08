@@ -2,7 +2,7 @@ class ScrubDesktop < Formula
   desc "Local clipboard anonymisation in your menu bar"
   homepage "https://github.com/onurkat/scrub-desktop"
   url "https://github.com/onurkat/scrub-desktop/releases/download/v1.0.3/scrub-desktop-1.0.3-source.tar.gz"
-  sha256 "7b0fba82a255682f554e477f7bb7d93333849e1e8cf614d16fd2665f432fd4f6"
+  sha256 "14ba1bb0589f38d8bbc3d3b9a87891f5e8b599dfd1829101735d19c770fdff1b"
   license "GPL-3.0-or-later"
   depends_on "node" => :build
   depends_on "rust" => :build

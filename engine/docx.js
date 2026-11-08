@@ -1,8 +1,9 @@
 import { unzipSync, zipSync, strFromU8, strToU8 } from "fflate";
 import { scrubText } from "./scrub.js";
-import { restoreDetailed, isExactOutput } from "./restore.js";
+import { defaults } from "./detect.js";
+import { restoreDetailed, isExactOutput, textHash } from "./restore.js";
 const allowed =
-  /^word\/(?:document|header\d*|footer\d*|footnotes|endnotes|comments|commentsExtended|people)\.xml$/;
+  /^word\/(?:document|header\d*|footer\d*|footnotes|endnotes|comments|commentsExtended|people|glossary\/document)\.xml$/;
 function decode(s) {
   return s.replace(/&(#x[\da-f]+|#\d+|amp|lt|gt|quot|apos);/gi, (all, v) => {
     if (v[0] === "#") {
@@ -16,12 +17,19 @@ function decode(s) {
 }
 const encode = (s) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-export function textModel(xml, base = 0) {
+export function textModel(
+  xml,
+  base = 0,
+  rootNamespace = "http://schemas.openxmlformats.org/wordprocessingml/2006/main",
+) {
   if (/<!DOCTYPE|<!ENTITY/i.test(xml))
     throw new Error("DOCX XML entities/DTDs are unsupported.");
   const mainNs = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
   const prefixes = new Set();
   let rootSeen = false;
+  const scopes = [new Map([["xml", "http://www.w3.org/XML/1998/namespace"]])];
+  const instructions = [];
+  let instruction = null;
   const tokens = /<(?:[^>"']|"[^"]*"|'[^']*')*>|[^<]+/g;
   let text = "",
     nodes = [],
@@ -36,6 +44,18 @@ export function textModel(xml, base = 0) {
     const token = m[0],
       at = m.index;
     if (token[0] !== "<") {
+      if (instruction) {
+        const value = decode(token);
+        instruction.group.nodes.push({
+          from: at,
+          to: at + token.length,
+          start: instruction.group.text.length,
+          end: instruction.group.text.length + value.length,
+          value,
+          open: instruction.open,
+        });
+        instruction.group.text += value;
+      }
       if (active) {
         const value = decode(token);
         nodes.push({
@@ -55,28 +75,53 @@ export function textModel(xml, base = 0) {
     if (!name) continue;
     const closing = token.startsWith("</"),
       self = /\/\s*>$/.test(token);
+    const scope = new Map(scopes[scopes.length - 1]);
     if (!closing) {
-      const bindings = [...token.matchAll(/\sxmlns(?::([\w.-]+))?\s*=\s*(?:"([^"]*)"|'([^']*)')/g)];
-      for (const binding of bindings) {
-        const prefix = binding[1] || "", uri = decode(binding[2] ?? binding[3]);
+      const attrs = [
+        ...token.matchAll(/\s([^\s=<>"']+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g),
+      ];
+      for (const binding of attrs.filter(
+        (a) => a[1] === "xmlns" || a[1].startsWith("xmlns:"),
+      )) {
+        const prefix = binding[1] === "xmlns" ? "" : binding[1].slice(6),
+          uri = decode(binding[2] ?? binding[3]);
         if (rootSeen && (uri === mainNs || prefixes.has(prefix)))
           throw new Error("Unsupported DOCX namespace redeclaration.");
+        if (uri === "http://purl.oclc.org/ooxml/wordprocessingml/main")
+          throw new Error("Unsupported DOCX Strict namespace.");
+        scope.set(prefix, uri);
         if (uri === mainNs) prefixes.add(prefix);
       }
-      if (!rootSeen && !prefixes.size && /(?:^|:)document$/.test(name))
+      const rootPrefix = name.includes(":") ? name.split(":")[0] : "";
+      if (!rootSeen && scope.get(rootPrefix) !== rootNamespace)
         throw new Error("Unsupported DOCX namespace layout.");
+      for (const attr of attrs) {
+        const prefix = attr[1].includes(":") ? attr[1].split(":")[0] : "";
+        if (prefix && prefix !== "xmlns" && !scope.get(prefix))
+          throw new Error("Undeclared DOCX namespace prefix.");
+      }
       rootSeen = true;
     }
-    const colon = name.indexOf(":"), prefix = colon < 0 ? "" : name.slice(0, colon);
+    if (name.includes(":") && !scope.get(name.split(":")[0]))
+      throw new Error("Undeclared DOCX namespace prefix.");
+    const colon = name.indexOf(":"),
+      prefix = colon < 0 ? "" : name.slice(0, colon);
     const local = prefixes.has(prefix) ? name.slice(colon + 1) : "";
     // Reviewer identities on tracked changes and comments are part of the text model (same numbering/dictionary).
     if (!closing) {
-      const author = /\s(?:\w+:)?author=(?:"([^"]*)"|'([^']*)')/.exec(token);
+      const author = /\s(?:[^\s=:"\'/>]+:)?author=(?:"([^"]*)"|'([^']*)')/.exec(
+        token,
+      );
       const authorValue = author && (author[1] ?? author[2]);
       if (author && authorValue) {
-        const from = at + author.index + author[0].indexOf(author[0].includes('"') ? '"' : "'") + 1;
+        const from =
+          at +
+          author.index +
+          author[0].indexOf(author[0].includes('"') ? '"' : "'") +
+          1;
         const value = decode(authorValue);
-        const initials = /\s(?:\w+:)?initials=(?:"([^"]*)"|'([^']*)')/.exec(token);
+        const initials =
+          /\s(?:[^\s=:"\'/>]+:)?initials=(?:"([^"]*)"|'([^']*)')/.exec(token);
         text += "\n"; // the author is its own line in the text model, never glued to run text
         nodes.push({
           from,
@@ -88,7 +133,11 @@ export function textModel(xml, base = 0) {
           attr: "author",
           initials: initials
             ? {
-                from: at + initials.index + initials[0].indexOf(initials[1] !== undefined ? '"' : "'") + 1,
+                from:
+                  at +
+                  initials.index +
+                  initials[0].indexOf(initials[1] !== undefined ? '"' : "'") +
+                  1,
                 to: at + initials.index + initials[0].length - 1,
               }
             : null,
@@ -97,6 +146,8 @@ export function textModel(xml, base = 0) {
       }
     }
     if (closing) {
+      scopes.pop();
+      if (local === "instrText") instruction = null;
       if (stack.pop() !== name) throw new Error("Malformed DOCX XML nesting.");
       if (local === "t" || local === "delText") active = null;
       if (local === "p" || local === "del") text += "\n";
@@ -104,19 +155,51 @@ export function textModel(xml, base = 0) {
     }
     if (local === "fldChar") {
       if (/fldCharType=["']begin/.test(token)) {
-        field.push(false);
+        field.push({ result: false, group: { text: "", nodes: [] } });
+        instructions.push(field[field.length - 1].group);
         fields++;
       }
       if (/fldCharType=["']separate/.test(token)) {
         if (!field.length) throw new Error("Malformed DOCX field separator.");
-        field[field.length - 1] = true;
+        field[field.length - 1].result = true;
       }
       if (/fldCharType=["']end/.test(token)) {
         if (!field.length) throw new Error("Malformed DOCX field end.");
         field.pop();
       }
     }
-    if (local === "fldSimple") fields++;
+    if (local === "instrText") {
+      const group = field[field.length - 1]?.group;
+      if (!group) throw new Error("DOCX instruction outside a field.");
+      instruction = { group, open: { from: at, to: at + token.length, token } };
+    }
+    if (local === "fldSimple") {
+      fields++;
+      const attr =
+        /\s(?:[^\s=:"'/>]+:)?instr\s*=\s*(?:"([^"]*)"|'([^']*)')/.exec(token);
+      if (attr) {
+        const raw = attr[1] ?? attr[2],
+          value = decode(raw);
+        const from =
+          at +
+          attr.index +
+          attr[0].indexOf(attr[1] !== undefined ? '"' : "'") +
+          1;
+        instructions.push({
+          text: value,
+          nodes: [
+            {
+              from,
+              to: from + raw.length,
+              start: 0,
+              end: value.length,
+              value,
+              attr: "instruction",
+            },
+          ],
+        });
+      }
+    }
     if (local === "drawing" || local === "pict") images++;
     if (local === "object") objects++;
     if (local === "del" || local === "ins") {
@@ -124,17 +207,18 @@ export function textModel(xml, base = 0) {
       if (local === "del") text += "\n";
     }
     if (local === "tab" || local === "br" || local === "cr") text += "\t";
-    if (
-      (local === "t" || local === "delText") &&
-      field.every(Boolean)
-    )
+    if ((local === "t" || local === "delText") && field.every((f) => f.result))
       active = { from: at, to: at + token.length, token };
-    if (!self) stack.push(name);
+    if (!self) {
+      stack.push(name);
+      scopes.push(scope);
+    } else if (local === "instrText") instruction = null;
     else if (local === "t" || local === "delText") active = null;
   }
+  if (!rootSeen) throw new Error("Unsupported DOCX namespace layout.");
   if (stack.length) throw new Error("Unclosed DOCX XML element.");
   if (field.length) throw new Error("Unclosed DOCX field.");
-  return { text, nodes, images, objects, fields, tracked };
+  return { text, nodes, images, objects, fields, tracked, instructions };
 }
 export function loadDocx(bytes) {
   if (!(bytes instanceof Uint8Array)) bytes = new Uint8Array(bytes);
@@ -171,7 +255,10 @@ export function loadDocx(bytes) {
     models = [];
   for (const name of names) {
     const xml = strFromU8(parts[name]);
-    const model = textModel(xml, text.length);
+    const metadataNamespace = /(?:people|commentsExtended)\.xml$/.test(name)
+      ? "http://schemas.microsoft.com/office/word/2012/wordml"
+      : undefined;
+    const model = textModel(xml, text.length, metadataNamespace);
     models.push({ name, xml, ...model });
     text += model.text + "\n";
   }
@@ -200,8 +287,17 @@ function replaceXML(model, matches) {
     for (const e of local.reverse())
       value = value.slice(0, e.start) + e.value + value.slice(e.end);
     if (node.attr) {
-      edits.push({ from: node.from, to: node.to, value: encode(value).replace(/"/g, "&quot;").replace(/'/g, "&apos;") });
-      if (node.initials) edits.push({ from: node.initials.from, to: node.initials.to, value: "" });
+      edits.push({
+        from: node.from,
+        to: node.to,
+        value: encode(value).replace(/"/g, "&quot;").replace(/'/g, "&apos;"),
+      });
+      if (node.initials)
+        edits.push({
+          from: node.initials.from,
+          to: node.initials.to,
+          value: "",
+        });
       continue;
     }
     edits.push({ from: node.from, to: node.to, value: encode(value) });
@@ -234,16 +330,116 @@ export function scrubDocx(bytes, policy = {}) {
     result = scrubText(doc.text, policy);
   for (const model of doc.models)
     doc.parts[model.name] = strToU8(replaceXML(model, result.matches));
+  // Reparse after visible edits so instruction offsets still point into current XML.
+  const instructionDoc = loadDocx(pack(doc.parts));
+  const detectors = Object.fromEntries(
+    Object.keys(defaults).map((k) => [k, false]),
+  );
+  const instructionValues = [];
+  for (const model of instructionDoc.models)
+    for (const group of model.instructions) {
+      if (!/^\s*(?:HYPERLINK|MAILTO)\b/i.test(group.text)) continue;
+      const urls = [...group.text.matchAll(/https?:\/\/[^\s<>"']+/gi)].map(
+        (m) => ({
+          start: m.index,
+          end: m.index + m[0].length,
+          category: "URL",
+        }),
+      );
+      const detected = scrubText(group.text, {
+        mapping: result.mapping,
+        detectors: { ...detectors, email: true },
+        manual: urls,
+      });
+      Object.assign(result.mapping.placeholders, detected.mapping.placeholders);
+      instructionValues.push(
+        ...detected.matches.map((m) => ({
+          value: group.text.slice(m.start, m.end),
+          category: m.category,
+        })),
+      );
+    }
+  for (const model of instructionDoc.models) {
+    const nodes = [],
+      matches = [];
+    let offset = 0;
+    for (const [index, group] of model.instructions.entries()) {
+      const manual = [];
+      const values = [
+        ...instructionValues,
+        ...Object.values(result.mapping.placeholders),
+        ...(result.mapping.variants || []).map((v) => ({
+          value: v.value,
+          category: result.mapping.placeholders[v.placeholder].category,
+        })),
+      ];
+      for (const entry of values) {
+        if (!entry.value) continue;
+        let at = group.text.indexOf(entry.value);
+        while (at >= 0) {
+          manual.push({
+            start: at,
+            end: at + entry.value.length,
+            category: entry.category,
+          });
+          at = group.text.indexOf(entry.value, at + entry.value.length);
+        }
+      }
+      const cleaned = scrubText(group.text, {
+        mapping: result.mapping,
+        detectors,
+        manual,
+      });
+      Object.assign(result.mapping.placeholders, cleaned.mapping.placeholders);
+      if (cleaned.mapping.variants?.length) {
+        (result.mapping.docxInstructions ||= []).push({
+          part: model.name,
+          index,
+          outputHash: textHash(cleaned.output),
+          variants: cleaned.mapping.variants,
+        });
+      }
+      nodes.push(
+        ...group.nodes.map((n) => ({
+          ...n,
+          start: n.start + offset,
+          end: n.end + offset,
+        })),
+      );
+      matches.push(
+        ...cleaned.matches.map((m) => ({
+          ...m,
+          start: m.start + offset,
+          end: m.end + offset,
+        })),
+      );
+      offset += group.text.length + 1;
+    }
+    doc.parts[model.name] = strToU8(replaceXML({ ...model, nodes }, matches));
+  }
   const skipped = [];
   if (doc.parts["word/people.xml"]) {
     // Presence info carries account identifiers (userId/providerId); drop it entirely.
     const xml = strFromU8(doc.parts["word/people.xml"]);
     const attrs = "(?:[^>\"']|\"[^\"]*\"|'[^']*')*";
     const out = xml
-      .replace(new RegExp("<(\\w+:)?presenceInfo\\b" + attrs + "/\\s*>", "g"), "")
-      .replace(new RegExp("<(\\w+:)?presenceInfo\\b" + attrs + ">[\\s\\S]*?</\\1presenceInfo\\s*>", "g"), "");
+      .replace(
+        new RegExp("<(\\w+:)?presenceInfo\\b" + attrs + "/\\s*>", "g"),
+        "",
+      )
+      .replace(
+        new RegExp(
+          "<(\\w+:)?presenceInfo\\b" +
+            attrs +
+            ">[\\s\\S]*?</\\1presenceInfo\\s*>",
+          "g",
+        ),
+        "",
+      );
     if (/presenceInfo|userId|providerId/.test(out))
-      throw new Error("Could not remove reviewer account identifiers from people.xml.");
+      throw new Error(
+        "Could not remove reviewer account identifiers from people.xml.",
+      );
     if (out !== xml) {
       doc.parts["word/people.xml"] = strToU8(out);
       skipped.push("people.xml: reviewer account identifiers removed");
@@ -251,35 +447,63 @@ export function scrubDocx(bytes, policy = {}) {
   }
   // Hyperlink targets (mailto:) and document properties carry identities outside the text model.
   const byValue = new Map(
-    Object.entries(result.mapping.placeholders).map(([p, e]) => [e.value.toLowerCase(), p]),
+    Object.entries(result.mapping.placeholders).map(([p, e]) => [
+      e.value.toLowerCase(),
+      p,
+    ]),
   );
   let rels = 0;
   for (const name of Object.keys(doc.parts))
     if (/^word\/_rels\/.*\.rels$/.test(name)) {
       const xml = strFromU8(doc.parts[name]);
-      const out = xml.replace(/Target="mailto:([^"?]+)([^"]*)"/g, (all, addr, rest) => {
-        const p = byValue.get(decode(addr).toLowerCase());
-        if (!p) return all;
-        rels++;
-        return 'Target="mailto:' + p + '"';
-      });
+      const out = xml.replace(
+        /Target="mailto:([^"?]+)([^"]*)"/g,
+        (all, addr, rest) => {
+          const p = byValue.get(decode(addr).toLowerCase());
+          if (!p) return all;
+          rels++;
+          return 'Target="mailto:' + p + '"';
+        },
+      );
       if (out !== xml) doc.parts[name] = strToU8(out);
     }
-  if (rels) skipped.push(rels + " mailto: hyperlink targets replaced with placeholders (links no longer open a mail client)");
+  if (rels)
+    skipped.push(
+      rels +
+        " mailto: hyperlink targets replaced with placeholders (links no longer open a mail client)",
+    );
   const keptMail = [];
   for (const name of Object.keys(doc.parts))
     if (/^word\/_rels\/.*\.rels$/.test(name))
-      for (const t of strFromU8(doc.parts[name]).matchAll(/Target="mailto:([^"?]+)/g)) keptMail.push(decode(t[1]));
-  if (keptMail.length) skipped.push("mailto: hyperlink targets kept (address not in the text): " + [...new Set(keptMail)].join(", "));
+      for (const t of strFromU8(doc.parts[name]).matchAll(
+        /Target="mailto:([^"?]+)/g,
+      ))
+        keptMail.push(decode(t[1]));
+  if (keptMail.length)
+    skipped.push(
+      "mailto: hyperlink targets kept (address not in the text): " +
+        [...new Set(keptMail)].join(", "),
+    );
   // Reviewer identities that matched nothing stay in Word's margin: say so, with the names, so they can be added to the dictionary.
   const keptAuthors = new Set();
   for (const model of doc.models)
     for (const node of model.nodes)
-      if (node.attr === "author" && !result.matches.some((x) => x.start < node.end && x.end > node.start)) keptAuthors.add(node.value);
-  if (keptAuthors.size) skipped.push("reviewer names kept in tracked changes/comments (add them to your dictionary): " + [...keptAuthors].join(", "));
+      if (
+        node.attr === "author" &&
+        !result.matches.some((x) => x.start < node.end && x.end > node.start)
+      )
+        keptAuthors.add(node.value);
+  if (keptAuthors.size)
+    skipped.push(
+      "reviewer names kept in tracked changes/comments (add them to your dictionary): " +
+        [...keptAuthors].join(", "),
+    );
   if (doc.parts["docProps/core.xml"]) {
     const xml = strFromU8(doc.parts["docProps/core.xml"]);
-    const out = xml.replace(/(<(?:dc:creator|cp:lastModifiedBy)>)[^<]*(<\/)/g, "$1$2");
+    const out = xml.replace(
+      /(<(?:dc:creator|cp:lastModifiedBy)>)[^<]*(<\/)/g,
+      "$1$2",
+    );
     if (out !== xml) {
       doc.parts["docProps/core.xml"] = strToU8(out);
       skipped.push("document properties: creator and last-modified-by cleared");
@@ -288,7 +512,10 @@ export function scrubDocx(bytes, policy = {}) {
   for (const [key, label] of [
     ["images", "images"],
     ["objects", "embedded objects"],
-    ["fields", "field instructions (including HYPERLINK/MAILTO codes; visible results inspected)"],
+    [
+      "fields",
+      "field instructions (including HYPERLINK/MAILTO codes; visible results inspected)",
+    ],
   ]) {
     const n = doc.models.reduce((s, m) => s + m[key], 0);
     if (n) skipped.push(n + " " + label + " not inspected");
@@ -326,5 +553,53 @@ export function restoreDocx(bytes, mapping) {
   }
   for (const model of doc.models)
     doc.parts[model.name] = strToU8(replaceXML(model, matches));
+  const instructionDoc = loadDocx(pack(doc.parts));
+  for (const model of instructionDoc.models) {
+    const nodes = [],
+      replacements = [];
+    let offset = 0;
+    for (const [index, group] of model.instructions.entries()) {
+      const exact = mapping.docxInstructions?.find(
+        (v) =>
+          v.part === model.name &&
+          v.index === index &&
+          v.outputHash === textHash(group.text),
+      );
+      const ordinals = {};
+      for (const m of group.text.matchAll(
+        /\[(?:PERSON|ORG|EMAIL|PHONE|IBAN|CARD|ID|SECRET|URL|ADDRESS|MONEY|TERM)_\d+\]/g,
+      )) {
+        const r = restoreDetailed(m[0], {
+          ...mapping,
+          outputHash: undefined,
+          variants: [],
+        });
+        r.unknown.forEach((p) => unknown.add(p));
+        const ordinal = ordinals[m[0]] || 0;
+        ordinals[m[0]] = ordinal + 1;
+        const value =
+          exact?.variants.find(
+            (v) => v.placeholder === m[0] && v.ordinal === ordinal,
+          )?.value ?? r.output;
+        if (value !== m[0])
+          replacements.push({
+            start: offset + m.index,
+            end: offset + m.index + m[0].length,
+            placeholder: value,
+          });
+      }
+      nodes.push(
+        ...group.nodes.map((n) => ({
+          ...n,
+          start: n.start + offset,
+          end: n.end + offset,
+        })),
+      );
+      offset += group.text.length + 1;
+    }
+    doc.parts[model.name] = strToU8(
+      replaceXML({ ...model, nodes }, replacements),
+    );
+  }
   return { output: pack(doc.parts), unknown: [...unknown] };
 }

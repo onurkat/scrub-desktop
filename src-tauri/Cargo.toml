@@ -1,6 +1,6 @@
 [package]
 name = "scrub-desktop"
-version = "1.0.0"
+version = "1.0.1"
 description = "Private clipboard anonymisation"
 authors = ["Onur Kat"]
 license = "GPL-3.0-or-later"

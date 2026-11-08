@@ -18,7 +18,9 @@ $unsigned = "$root/.artifacts/Scrub-unsigned.msix"
 & $sdk.FullName pack /d $stage /p $unsigned /o
 if ($LASTEXITCODE) { throw 'MakeAppx failed' }
 if ($TestInstall) {
-  $cert = New-SelfSignedCertificate -Type Custom -Subject 'CN=Onur Kat' -KeyUsage DigitalSignature -FriendlyName ScrubCITest -CertStoreLocation Cert:\CurrentUser\My -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3','2.5.29.19={text}')
+  [xml]$manifest = Get-Content "$PSScriptRoot/AppxManifest.xml"
+  $identity = $manifest.Package.Identity
+  $cert = New-SelfSignedCertificate -Type Custom -Subject $identity.Publisher -KeyUsage DigitalSignature -FriendlyName ScrubCITest -CertStoreLocation Cert:\CurrentUser\My -TextExtension @('2.5.29.37={text}1.3.6.1.5.5.7.3.3','2.5.29.19={text}')
   try {
     Export-Certificate -Cert $cert -FilePath "$root/.artifacts/ci.cer" | Out-Null
     Import-Certificate -FilePath "$root/.artifacts/ci.cer" -CertStoreLocation Cert:\LocalMachine\TrustedPeople | Out-Null
@@ -26,11 +28,11 @@ if ($TestInstall) {
     & (Join-Path $sdk.Directory 'signtool.exe') sign /fd SHA256 /sha1 $cert.Thumbprint "$root/.artifacts/Scrub-test.msix"
     if ($LASTEXITCODE) { throw 'Test signing failed' }
     Add-AppxPackage "$root/.artifacts/Scrub-test.msix"
-    $package = Get-AppxPackage OnurKat.Scrub
+    $package = Get-AppxPackage $identity.Name
     $process = Start-Process -FilePath "$($package.InstallLocation)/scrub-desktop.exe" -ArgumentList '--self-test' -Wait -PassThru
     if ($process.ExitCode) { throw 'Installed MSIX self-test failed' }
   } finally {
-    Get-AppxPackage OnurKat.Scrub | Remove-AppxPackage
+    Get-AppxPackage $identity.Name | Remove-AppxPackage
     Remove-Item "Cert:\CurrentUser\My\$($cert.Thumbprint)" -ErrorAction SilentlyContinue
     Remove-Item "Cert:\LocalMachine\TrustedPeople\$($cert.Thumbprint)" -ErrorAction SilentlyContinue
   }

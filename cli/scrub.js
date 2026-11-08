@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { hookMain } from "./hooks.js";
 import { docxWarnings } from "./docx-warnings.js";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
@@ -11,6 +12,8 @@ const usage = `Usage: scrub [FILE|-] [--out FILE] [--dictionary CSV] [--policy J
              [--language CODE] [--save-anyway]
              [--mapping FILE] [--continue FILE] [--keep] [--report] [--json] [--fail-on-detect]
        scrub restore [FILE|-] (--mapping FILE | --last) [--out FILE] [--json]
+       scrub hook install|uninstall claude-code|gemini [--project|--user]
+       scrub hook run claude-code|gemini
 Text defaults to stdin/stdout. DOCX requires --out. Mapping storage is opt-in.
 Exit codes: 0 success, 1 usage, 2 input/storage error, 3 detected (--fail-on-detect).`;
 class Failure extends Error {
@@ -28,12 +31,16 @@ async function jsonFile(path, label) {
 }
 async function main() {
   const args = process.argv.slice(2);
+  if (args[0] === "hook") {
+    process.exitCode = await hookMain(args.slice(1));
+    return;
+  }
   if (args.includes("--help") || args.includes("-h")) {
     console.log(usage);
     return;
   }
   if (args.includes("--version")) {
-    console.log("1.0.1");
+    console.log("1.0.2");
     return;
   }
   const restoring = args[0] === "restore";

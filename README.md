@@ -119,3 +119,38 @@ Application data is stored at:
 `QA.md` maps each acceptance requirement to executable checks and evidence. Browser tests use an explicit test-only Tauri bridge; native tests exercise the actual Linux executable. Set `CHROME_BIN` when Chromium is not in the standard Playwright cache.
 
 GPL-3.0-or-later. Source: https://github.com/onurkat/scrub-desktop · Support: onur@okteknoloji.com · Sponsors: https://github.com/sponsors/onurkat
+
+### Prompt guards for Claude Code and Gemini CLI
+
+With the `scrub` CLI installed on PATH (Node 20+), run these commands in your
+project directory. The default scope is the current directory, not a search for
+the nearest Git root:
+
+```sh
+scrub hook install claude-code --project
+scrub hook install gemini --project
+# Or install for all projects in your user settings:
+scrub hook install claude-code --user
+scrub hook install gemini --user
+```
+
+The installers merge `.claude/settings.json` / `.gemini/settings.json` (or the
+same paths under your home directory), preserving other hooks and settings.
+Restart the host CLI and confirm the hook is enabled/trusted. Existing host
+settings that disable hooks are preserved. Repeated installation is idempotent.
+Use `scrub hook uninstall claude-code [--project|--user]` or
+`scrub hook uninstall gemini [--project|--user]` in the same scope to remove only
+Scrub's command handler.
+
+[Claude Code UserPromptSubmit](https://code.claude.com/docs/en/hooks#userpromptsubmit)
+and [Gemini BeforeAgent](https://geminicli.com/docs/hooks/reference/#beforeagent)
+pass JSON containing `prompt` to `scrub hook run claude-code` / `scrub hook run
+gemini`. Scrub checks the engine's default detectors plus the desktop shared
+store's dictionary and aliases, even when desktop detector switches are off.
+A detection exits 2 and prints category counts to stderr, without original
+values. Scrub with Ctrl+Alt+S or the `scrub` command and resubmit; an explicit
+`#noscrub` prefix followed by whitespace (or end of prompt) bypasses the check.
+Clean prompts exit 0 with no output. Invalid input, an unreadable dictionary or
+input over 8 MiB blocks with a generic error. No prompt or mapping is saved by
+Scrub's guard. Host CLI history/storage remains governed by the host; this guard
+checks submitted text, not attachments, tool results or every model request.

@@ -1,6 +1,6 @@
 {
   "name": "@onurkat/scrub",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Private, reversible text and document anonymisation for desktop and terminal workflows",
   "type": "module",
   "license": "GPL-3.0-or-later",

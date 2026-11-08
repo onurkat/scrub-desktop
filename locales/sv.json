@@ -120,5 +120,6 @@
   "docxCleaned": "Metadata om granskarkonton eller dokumentförfattare borttagna.",
   "docxGeneral": "Bilder, objekt, fältkoder, anpassad XML, länkar och andra metadata kan fortfarande innehålla privata uppgifter. Granska före delning.",
   "saveAnyway": "Spara ändå",
-  "docxRelationships": "Relationsfiler med annat ogranskat innehåll: $1"
+  "docxRelationships": "Relationsfiler med annat ogranskat innehåll: $1",
+  "docxTargetsKept": "$1 relationsmål innehåller fortfarande @. Kontrollera före delning."
 }

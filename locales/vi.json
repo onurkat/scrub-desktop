@@ -120,5 +120,6 @@
   "docxCleaned": "Đã xóa siêu dữ liệu tài khoản người duyệt hoặc tác giả tài liệu.",
   "docxGeneral": "Hình ảnh, đối tượng, mã trường, XML tùy chỉnh, liên kết và siêu dữ liệu khác vẫn có thể chứa dữ liệu riêng tư. Kiểm tra trước khi chia sẻ.",
   "saveAnyway": "Vẫn lưu",
-  "docxRelationships": "Tệp quan hệ có nội dung khác chưa được kiểm tra: $1"
+  "docxRelationships": "Tệp quan hệ có nội dung khác chưa được kiểm tra: $1",
+  "docxTargetsKept": "$1 đích quan hệ vẫn chứa @. Kiểm tra trước khi chia sẻ."
 }

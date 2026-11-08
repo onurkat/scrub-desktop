@@ -123,3 +123,8 @@ AUDIT-010 UI verification completed: 340 localized views pass at 480/800 pixels;
 - `cargo test`: **2/2**; `cargo clippy --all-targets -- -D warnings`: pass; `cargo build --release`: pass. `tools/qa/ui-flows.mjs`: review/restore/dictionary/settings and axe pass. `tools/qa/i18n-ui.mjs`: **340** localized views at 480/800 pass, 30 screenshots generated.
 - Fresh release executable with `tools/qa/native-x11.sh`: hotkey review, Escape cancellation, single-instance scrub, repeated-token restore, empty/ordinary/image clipboard preservation pass. Host emits the existing accessibility-bus warning; assertions pass.
 - Hook protocol follows linked official host references in README. Actual authenticated Claude/Gemini sessions and Windows MSIX execution were not run here; protocol and installer subprocess tests are local. Windows/macOS CI remain the established auditor-after-push check. No publication or push. Ruby is absent on this host; Homebrew changes are version/checksum metadata, with source archive reproduction documented in `packaging/homebrew/README.md`.
+
+### AUDIT-012 relationship targets
+
+Engine synced from f35567d. XML-whitespace-prefixed mailto links are scrubbed; all other Word relationship targets apply email/dictionary detection, with a content-free retained-@ warning. `docxTargetsKept` translated in all 34 locales; locale validation: 123 keys. Node 20 passes 23/23 including warning adapter and upstream hash parity. Engine's 85-test suite includes generated targets, package-wide original searches, restored relationships and equivalent XML entity/whitespace representations.
+Node 22 also passes 23/23. Documents UI save/restore and dictionary CSV flow pass after sync; notices use the same translated adapter in CLI and Documents.

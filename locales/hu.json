@@ -120,5 +120,6 @@
   "docxCleaned": "A véleményezői fiókok vagy dokumentumszerzők metaadatai eltávolítva.",
   "docxGeneral": "A képek, objektumok, mezőkódok, egyéni XML, hivatkozások és más metaadatok még tartalmazhatnak magánadatokat. Megosztás előtt ellenőrizze őket.",
   "saveAnyway": "Mentés mindenképpen",
-  "docxRelationships": "Egyéb, nem ellenőrzött tartalmú kapcsolatfájlok: $1"
+  "docxRelationships": "Egyéb, nem ellenőrzött tartalmú kapcsolatfájlok: $1",
+  "docxTargetsKept": "$1 kapcsolatcél még tartalmaz @ jelet. Megosztás előtt ellenőrizze."
 }

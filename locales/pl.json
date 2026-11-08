@@ -120,5 +120,6 @@
   "docxCleaned": "Usunięto metadane kont recenzentów lub autorów dokumentu.",
   "docxGeneral": "Obrazy, obiekty, kody pól, niestandardowy XML, odsyłacze i inne metadane mogą nadal zawierać prywatne dane. Sprawdź je przed udostępnieniem.",
   "saveAnyway": "Zapisz mimo to",
-  "docxRelationships": "Pliki relacji z inną niesprawdzoną zawartością: $1"
+  "docxRelationships": "Pliki relacji z inną niesprawdzoną zawartością: $1",
+  "docxTargetsKept": "$1 celów relacji nadal zawiera @. Sprawdź przed udostępnieniem."
 }

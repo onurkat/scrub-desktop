@@ -120,5 +120,6 @@
   "docxCleaned": "Metadati degli account dei revisori o degli autori rimossi.",
   "docxGeneral": "Immagini, oggetti, codici di campo, XML personalizzato, link e altri metadati possono ancora contenere dati privati. Controllali prima di condividere.",
   "saveAnyway": "Salva comunque",
-  "docxRelationships": "File di relazioni con altri contenuti non esaminati: $1"
+  "docxRelationships": "File di relazioni con altri contenuti non esaminati: $1",
+  "docxTargetsKept": "$1 destinazioni di relazione contengono ancora @. Controlla prima di condividere."
 }

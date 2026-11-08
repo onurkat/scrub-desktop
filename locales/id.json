@@ -120,5 +120,6 @@
   "docxCleaned": "Metadata akun peninjau atau pembuat dokumen dihapus.",
   "docxGeneral": "Gambar, objek, kode bidang, XML khusus, tautan, dan metadata lain mungkin masih berisi data pribadi. Periksa sebelum berbagi.",
   "saveAnyway": "Tetap simpan",
-  "docxRelationships": "File relasi dengan konten lain yang belum diperiksa: $1"
+  "docxRelationships": "File relasi dengan konten lain yang belum diperiksa: $1",
+  "docxTargetsKept": "$1 target relasi masih berisi @. Periksa sebelum berbagi."
 }

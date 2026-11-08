@@ -16,6 +16,8 @@ export function docxWarnings(skipped = []) {
       )
     )
       notices.push(["docxRelationships", n]);
+    else if (/^\d+ relationship targets containing @ kept/.test(message))
+      notices.push(["docxTargetsKept", n]);
     else if (message.startsWith("tracked changes present"))
       notices.push(["docxTracked"]);
     else if (/^\d+ mailto: hyperlink targets kept/.test(message))

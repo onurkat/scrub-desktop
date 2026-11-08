@@ -120,5 +120,6 @@
   "docxCleaned": "Metadata účtů recenzentů nebo autorů dokumentu odstraněna.",
   "docxGeneral": "Obrázky, objekty, kódy polí, vlastní XML, odkazy a další metadata mohou stále obsahovat soukromé údaje. Před sdílením je zkontrolujte.",
   "saveAnyway": "Přesto uložit",
-  "docxRelationships": "Soubory vztahů s dalším nezkontrolovaným obsahem: $1"
+  "docxRelationships": "Soubory vztahů s dalším nezkontrolovaným obsahem: $1",
+  "docxTargetsKept": "$1 cílů vztahů stále obsahuje @. Před sdílením je zkontrolujte."
 }

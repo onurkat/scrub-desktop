@@ -120,5 +120,6 @@
   "docxCleaned": "Metadatele conturilor recenzenților sau autorilor documentului au fost eliminate.",
   "docxGeneral": "Imaginile, obiectele, codurile de câmp, XML-ul personalizat, linkurile și alte metadate pot conține încă date private. Inspectați-le înainte de partajare.",
   "saveAnyway": "Salvează oricum",
-  "docxRelationships": "Fișiere de relații cu alt conținut neinspectat: $1"
+  "docxRelationships": "Fișiere de relații cu alt conținut neinspectat: $1",
+  "docxTargetsKept": "$1 destinații de relație conțin încă @. Verificați înainte de partajare."
 }

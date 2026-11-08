@@ -120,5 +120,6 @@
   "docxCleaned": "Gözden geçiren hesabı veya belge yazarı meta verileri kaldırıldı.",
   "docxGeneral": "Görseller, nesneler, alan kodları, özel XML, bağlantılar ve diğer meta veriler hâlâ özel veri içerebilir. Paylaşmadan önce inceleyin.",
   "saveAnyway": "Yine de kaydet",
-  "docxRelationships": "Diğer içeriği incelenmemiş ilişki dosyaları: $1"
+  "docxRelationships": "Diğer içeriği incelenmemiş ilişki dosyaları: $1",
+  "docxTargetsKept": "$1 ilişki hedefi hâlâ @ içeriyor. Paylaşmadan önce inceleyin."
 }

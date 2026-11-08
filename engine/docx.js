@@ -338,16 +338,16 @@ function relationshipParts(doc) {
   }
   return { handled, unhandled };
 }
-function mapMailTargets(xml, transform) {
+function mapRelationshipTargets(xml, transform) {
   if (/<!DOCTYPE|<!ENTITY/i.test(xml))
     throw new Error("DOCX relationship entities/DTDs are unsupported.");
-  let index = 0;
+  let index = 0, mailIndex = 0;
   return xml.replace(
     /\bTarget\s*=\s*("[^"]*"|'[^']*')/g,
     (attribute, quoted) => {
       const raw = quoted.slice(1, -1);
-      if (!/^mailto:/i.test(decode(raw))) return attribute;
-      const replacement = transform(raw, index++);
+      const isMail = /^mailto:/i.test(decode(raw).replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, ""));
+      const replacement = transform(raw, index++, isMail ? mailIndex++ : -1);
       return (
         attribute.slice(0, attribute.indexOf(quoted)) +
         quoted[0] +
@@ -480,14 +480,28 @@ export function scrubDocx(bytes, policy = {}) {
   // Handle mail targets of every inspected part, including nested glossary relationships.
   const relationships = relationshipParts(doc);
   let rels = 0,
-    keptMail = 0;
+    keptMail = 0, keptTargets = 0;
   for (const name of [
     ...relationships.handled,
     ...relationships.unhandled,
   ].sort()) {
     const xml = strFromU8(doc.parts[name]);
-    const out = mapMailTargets(xml, (raw, index) => {
-      const target = decode(raw);
+    const out = mapRelationshipTargets(xml, (raw, index, mailIndex) => {
+      const decoded = decode(raw);
+      const target = decoded.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, "");
+      if (mailIndex < 0) {
+        const cleaned = scrubText(decoded, {
+          mapping: result.mapping,
+          detectors: { ...detectors, email: true },
+          dictionary: policy.dictionary,
+        });
+        Object.assign(result.mapping.placeholders, cleaned.mapping.placeholders);
+        if (cleaned.output.includes("@")) keptTargets++;
+        if (!cleaned.matches.length) return raw;
+        const value = encode(cleaned.output).replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+        (result.mapping.docxRelationships ||= []).push({part: name, targetIndex: index, outputHash: textHash(value), value: raw});
+        return value;
+      }
       let payload;
       try {
         payload = decodeURIComponent(target.slice(7));
@@ -514,7 +528,7 @@ export function scrubDocx(bytes, policy = {}) {
         .replace(/'/g, "&apos;");
       (result.mapping.docxRelationships ||= []).push({
         part: name,
-        index,
+        targetIndex: index,
         outputHash: textHash(value),
         value: raw,
       });
@@ -533,6 +547,7 @@ export function scrubDocx(bytes, policy = {}) {
       keptMail +
         " mailto: hyperlink targets kept (unrecognised addresses; inspect before sharing)",
     );
+  if (keptTargets) skipped.push(keptTargets + " relationship targets containing @ kept (inspect before sharing)");
   if (relationships.unhandled.length)
     skipped.push(
       relationships.unhandled.length +
@@ -658,11 +673,11 @@ export function restoreDocx(bytes, mapping) {
   for (const name of Object.values(relationshipParts(doc)).flat().sort()) {
     const xml = strFromU8(doc.parts[name]);
     doc.parts[name] = strToU8(
-      mapMailTargets(xml, (raw, index) => {
+      mapRelationshipTargets(xml, (raw, index, mailIndex) => {
         const saved = mapping.docxRelationships?.find(
           (v) =>
             v.part === name &&
-            v.index === index &&
+            (v.targetIndex !== undefined ? v.targetIndex === index : v.index === mailIndex) &&
             v.outputHash === textHash(raw),
         );
         if (saved)

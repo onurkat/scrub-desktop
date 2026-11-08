@@ -14,7 +14,10 @@ Dictionary terms and aliases use the same CSV format as the Scrub extension. Doc
 
 ## Install or build
 
-This checkout does not publish a release, npm package or Store listing. The owner publishes those separately. Available local build outputs are described in QA.md.
+- **macOS:** `brew install onurkat/scrub/scrub-desktop` (built from source on your Mac, see below).
+- **Linux:** AppImage and .deb on the [releases page](https://github.com/onurkat/scrub-desktop/releases/latest).
+- **Windows:** Microsoft Store (coming soon) or build from source.
+- **CLI:** `brew install onurkat/scrub/scrub`.
 
 ### From source
 
@@ -32,7 +35,7 @@ Linux defaults to `.deb` and AppImage bundles in `src-tauri/target/release/bundl
 
 ### macOS / Homebrew
 
-The formulas in `packaging/homebrew/` build from source. After the owner publishes the v1.0.0 source archive described in `packaging/homebrew/README.md` and a tap containing them:
+The [onurkat/homebrew-scrub](https://github.com/onurkat/homebrew-scrub) tap builds the tagged source archive on your Mac, so the app opens without a Gatekeeper prompt:
 
 ```sh
 brew install onurkat/scrub/scrub-desktop

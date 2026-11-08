@@ -8,10 +8,8 @@ class Scrub < Formula
   depends_on "node"
 
   def install
-    system "npm", "ci", "--omit=dev", "--ignore-scripts"
-    system "npm", "pack", "--ignore-scripts"
-    system "npm", "install", "--global", "--prefix", libexec, "--ignore-scripts", "onurkat-scrub-1.0.0.tgz"
-    bin.install_symlink libexec/"bin/scrub"
+    system "npm", "install", *std_npm_args
+    bin.install_symlink libexec.glob("bin/*")
   end
 
   test do

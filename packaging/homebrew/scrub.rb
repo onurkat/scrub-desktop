@@ -13,6 +13,6 @@ class Scrub < Formula
   end
 
   test do
-    assert_equal "[EMAIL_1]", pipe_output("#{bin}/scrub", "test@example.com").strip
+    assert_equal "[EMAIL_1]", pipe_output(bin/"scrub", "test@example.com").strip
   end
 end

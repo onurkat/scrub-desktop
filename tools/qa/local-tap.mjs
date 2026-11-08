@@ -27,7 +27,7 @@ for (const name of ["scrub", "scrub-desktop"]) {
       .replace(/^  (sha256|version) .+\n/gm, "")
       .replace(
         /  url .+/,
-        `  url "file://${archive}"\n  sha256 "${sha}"\n  version "1.0.0"`,
+        `  url "file://${archive}"\n  version "1.0.0"\n  sha256 "${sha}"`,
       ),
   );
 }

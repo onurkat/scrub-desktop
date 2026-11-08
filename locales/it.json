@@ -109,5 +109,15 @@
   "privacyStorage": "Le corrispondenze restano in memoria se non attivi il salvataggio. Si conservano le ultime 10 conversazioni. Cancella tutte le corrispondenze per eliminare gli originali salvati.",
   "documentHint": "Trascina o scegli un file DOCX, TXT, CSV o Markdown. Verifica le sostituzioni prima di salvare una copia separata. Gli originali restano invariati.",
   "settingsSave": "Salva scorciatoie",
-  "reviewSuggestion": "Suggerimento da controllare (non sostituito): $1"
+  "reviewSuggestion": "Suggerimento da controllare (non sostituito): $1",
+  "docxImages": "Immagini non esaminate: $1",
+  "docxObjects": "Oggetti incorporati non esaminati: $1",
+  "docxFields": "Codici di campo non esaminati: $1; risultati visibili esaminati.",
+  "docxTracked": "Sono presenti revisioni; il testo eliminato è stato esaminato.",
+  "docxMailReplaced": "Destinazioni dei link e-mail sostituite: $1",
+  "docxMailKept": "Destinazioni dei link e-mail conservate: $1",
+  "docxReviewers": "Nomi dei revisori conservati: $1. Aggiungili al dizionario.",
+  "docxCleaned": "Metadati degli account dei revisori o degli autori rimossi.",
+  "docxGeneral": "Immagini, oggetti, codici di campo, XML personalizzato, link e altri metadati possono ancora contenere dati privati. Controllali prima di condividere.",
+  "saveAnyway": "Salva comunque"
 }

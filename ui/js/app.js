@@ -1,3 +1,4 @@
+import { docxWarnings } from "../vendor/docx-warnings.js";
 import { defaults as detectorDefaults } from "../engine/detect.js";
 import { scrubText, scrub } from "../engine/scrub.js";
 import { restoreDocx } from "../engine/docx.js";
@@ -304,6 +305,29 @@ function runText(text) {
   review.candidates = scrubText(text, policy()).matches;
   renderReview();
 }
+function showDocumentWarnings(result) {
+  const notices = docxWarnings(result.report?.skipped);
+  $("document-warnings").replaceChildren(
+    ...notices.map(([key, ...args]) => el("li", t(key, ...args))),
+  );
+  $("document-warnings").hidden = !notices.length;
+  return notices;
+}
+async function approveDocument(result) {
+  if (!showDocumentWarnings(result).length) return true;
+  const dialog = $("document-confirm");
+  dialog.returnValue = "";
+  const answer = new Promise((resolve) =>
+    dialog.addEventListener(
+      "close",
+      () => resolve(dialog.returnValue === "save"),
+      { once: true },
+    ),
+  );
+  dialog.showModal();
+  $("document-cancel").focus();
+  return answer;
+}
 async function copyReview() {
   if (!review) throw new Error("genericError");
   if (review.file) {
@@ -314,6 +338,7 @@ async function copyReview() {
         : { kind: "text", text: review.original },
       policy(),
     );
+    if (!(await approveDocument(result))) return;
     if (
       await fileSave(
         file.name.replace(/(\.[^.]+)$/, "-scrubbed$1"),
@@ -551,6 +576,8 @@ function selectFile(file) {
   if (!/\.(docx|txt|csv|md)$/i.test(file.name)) throw new Error("fileError");
   documentFile = { name: file.name, bytes: new Uint8Array(file.bytes) };
   documentResult = null;
+  $("document-warnings").replaceChildren();
+  $("document-warnings").hidden = true;
   $("document-name").textContent = file.name;
   $("document-scrub").disabled = false;
   $("document-restore").disabled = !documentMapping;
@@ -585,6 +612,7 @@ async function runDocument(restore = false) {
         mapping: currentMapping(store),
       },
     );
+  showDocumentWarnings(documentResult);
   if (!restore) {
     runText(documentResult.inputText);
     review.file = documentFile;
@@ -854,7 +882,12 @@ on("sample", "click", async () => {
   runText($("input").value);
 });
 document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape" && !$("confirmation").open && review) {
+  if (
+    e.key === "Escape" &&
+    !$("confirmation").open &&
+    !$("document-confirm").open &&
+    review
+  ) {
     e.preventDefault();
     $("cancel").click();
   }

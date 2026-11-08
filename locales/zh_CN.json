@@ -109,5 +109,15 @@
   "privacyStorage": "除非启用保存，否则映射仅保留在内存中。仅保留最近 10 个对话。清除所有映射可删除已保存的原始信息。",
   "documentHint": "拖入或选择 DOCX、TXT、CSV 或 Markdown 文件。检查替换内容后另存副本。原文件保持不变。",
   "settingsSave": "保存快捷键",
-  "reviewSuggestion": "待检查的建议（未替换）：$1"
+  "reviewSuggestion": "待检查的建议（未替换）：$1",
+  "docxImages": "未检查的图片：$1",
+  "docxObjects": "未检查的嵌入对象：$1",
+  "docxFields": "未检查的域代码：$1；已检查可见结果。",
+  "docxTracked": "存在修订记录；已检查删除的文本。",
+  "docxMailReplaced": "已替换的邮件链接目标：$1",
+  "docxMailKept": "保留的邮件链接目标：$1",
+  "docxReviewers": "保留的审阅者姓名：$1。请将其添加到词典。",
+  "docxCleaned": "已移除审阅者账户或文档作者的元数据。",
+  "docxGeneral": "图片、对象、域代码、自定义 XML、链接及其他元数据仍可能包含隐私数据。请在分享前检查。",
+  "saveAnyway": "仍然保存"
 }

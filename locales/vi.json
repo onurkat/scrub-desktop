@@ -109,5 +109,15 @@
   "privacyStorage": "Ánh xạ chỉ nằm trong bộ nhớ trừ khi bạn bật lưu trữ. Chỉ giữ 10 cuộc trò chuyện gần nhất. Xóa mọi ánh xạ để xóa thông tin gốc đã lưu.",
   "documentHint": "Thả hoặc chọn tệp DOCX, TXT, CSV hay Markdown. Xem lại các thay thế trước khi lưu bản sao riêng. Tệp gốc không thay đổi.",
   "settingsSave": "Lưu phím tắt",
-  "reviewSuggestion": "Xem lại gợi ý (chưa thay thế): $1"
+  "reviewSuggestion": "Xem lại gợi ý (chưa thay thế): $1",
+  "docxImages": "Hình ảnh chưa được kiểm tra: $1",
+  "docxObjects": "Đối tượng nhúng chưa được kiểm tra: $1",
+  "docxFields": "Mã trường chưa được kiểm tra: $1; kết quả hiển thị đã được kiểm tra.",
+  "docxTracked": "Có thay đổi được theo dõi; văn bản đã xóa đã được kiểm tra.",
+  "docxMailReplaced": "Đích liên kết email đã thay thế: $1",
+  "docxMailKept": "Đích liên kết email được giữ lại: $1",
+  "docxReviewers": "Tên người duyệt được giữ lại: $1. Hãy thêm vào từ điển.",
+  "docxCleaned": "Đã xóa siêu dữ liệu tài khoản người duyệt hoặc tác giả tài liệu.",
+  "docxGeneral": "Hình ảnh, đối tượng, mã trường, XML tùy chỉnh, liên kết và siêu dữ liệu khác vẫn có thể chứa dữ liệu riêng tư. Kiểm tra trước khi chia sẻ.",
+  "saveAnyway": "Vẫn lưu"
 }

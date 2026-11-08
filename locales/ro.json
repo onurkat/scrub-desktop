@@ -109,5 +109,15 @@
   "privacyStorage": "Corespondențele rămân în memorie dacă nu activezi stocarea. Se păstrează doar ultimele 10 conversații. Șterge toate corespondențele pentru a elimina originalele salvate.",
   "documentHint": "Trage sau alege un fișier DOCX, TXT, CSV sau Markdown. Verifică înlocuirile înainte de a salva o copie separată. Originalele rămân neschimbate.",
   "settingsSave": "Salvează scurtăturile",
-  "reviewSuggestion": "Verificați sugestia (neînlocuită): $1"
+  "reviewSuggestion": "Verificați sugestia (neînlocuită): $1",
+  "docxImages": "Imagini neinspectate: $1",
+  "docxObjects": "Obiecte încorporate neinspectate: $1",
+  "docxFields": "Coduri de câmp neinspectate: $1; rezultatele vizibile au fost inspectate.",
+  "docxTracked": "Există modificări urmărite; textul șters a fost inspectat.",
+  "docxMailReplaced": "Destinații ale linkurilor e-mail înlocuite: $1",
+  "docxMailKept": "Destinații ale linkurilor e-mail păstrate: $1",
+  "docxReviewers": "Nume de recenzenți păstrate: $1. Adăugați-le în dicționar.",
+  "docxCleaned": "Metadatele conturilor recenzenților sau autorilor documentului au fost eliminate.",
+  "docxGeneral": "Imaginile, obiectele, codurile de câmp, XML-ul personalizat, linkurile și alte metadate pot conține încă date private. Inspectați-le înainte de partajare.",
+  "saveAnyway": "Salvează oricum"
 }

@@ -109,5 +109,15 @@
   "privacyStorage": "저장을 켜지 않으면 매핑은 메모리에만 남습니다. 최근 대화 10개만 유지합니다. 저장된 원본 정보를 지우려면 모든 매핑을 삭제하세요.",
   "documentHint": "DOCX, TXT, CSV 또는 Markdown 파일을 끌어 놓거나 선택하세요. 별도 사본을 저장하기 전에 대체 내용을 검토하세요. 원본은 변경되지 않습니다.",
   "settingsSave": "단축키 저장",
-  "reviewSuggestion": "검토할 제안(대체되지 않음): $1"
+  "reviewSuggestion": "검토할 제안(대체되지 않음): $1",
+  "docxImages": "검사하지 않은 이미지: $1",
+  "docxObjects": "검사하지 않은 삽입 개체: $1",
+  "docxFields": "검사하지 않은 필드 코드: $1. 표시 결과는 검사했습니다.",
+  "docxTracked": "추적된 변경 내용이 있습니다. 삭제된 텍스트도 검사했습니다.",
+  "docxMailReplaced": "바꾼 이메일 링크 대상: $1",
+  "docxMailKept": "유지한 이메일 링크 대상: $1",
+  "docxReviewers": "유지한 검토자 이름: $1. 사전에 추가하세요.",
+  "docxCleaned": "검토자 계정 또는 문서 작성자 메타데이터를 제거했습니다.",
+  "docxGeneral": "이미지, 개체, 필드 코드, 사용자 지정 XML, 링크 및 기타 메타데이터에 개인 정보가 남아 있을 수 있습니다. 공유하기 전에 확인하세요.",
+  "saveAnyway": "그래도 저장"
 }

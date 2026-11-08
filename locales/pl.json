@@ -109,5 +109,15 @@
   "privacyStorage": "Mapowania pozostają w pamięci, chyba że włączysz zapis. Zachowujemy ostatnie 10 rozmów. Usuń wszystkie mapowania, aby skasować zapisane oryginały.",
   "documentHint": "Przeciągnij lub wybierz plik DOCX, TXT, CSV lub Markdown. Sprawdź zamiany przed zapisaniem osobnej kopii. Oryginały pozostają bez zmian.",
   "settingsSave": "Zapisz skróty",
-  "reviewSuggestion": "Sprawdź sugestię (niezamienioną): $1"
+  "reviewSuggestion": "Sprawdź sugestię (niezamienioną): $1",
+  "docxImages": "Niesprawdzone obrazy: $1",
+  "docxObjects": "Niesprawdzone obiekty osadzone: $1",
+  "docxFields": "Niesprawdzone kody pól: $1; widoczne wyniki sprawdzono.",
+  "docxTracked": "Występują śledzone zmiany; usunięty tekst został sprawdzony.",
+  "docxMailReplaced": "Zastąpione cele odsyłaczy e-mail: $1",
+  "docxMailKept": "Zachowane cele odsyłaczy e-mail: $1",
+  "docxReviewers": "Zachowane nazwiska recenzentów: $1. Dodaj je do słownika.",
+  "docxCleaned": "Usunięto metadane kont recenzentów lub autorów dokumentu.",
+  "docxGeneral": "Obrazy, obiekty, kody pól, niestandardowy XML, odsyłacze i inne metadane mogą nadal zawierać prywatne dane. Sprawdź je przed udostępnieniem.",
+  "saveAnyway": "Zapisz mimo to"
 }

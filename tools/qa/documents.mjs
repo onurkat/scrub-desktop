@@ -20,7 +20,21 @@ try {
   await page.waitForFunction(
     () => document.querySelector("#review").parentElement.id === "documents",
   );
+  assert.match(
+    await page.locator("#document-warnings").textContent(),
+    /Images not inspected: 2/,
+  );
   await page.locator("#copy").click();
+  await page.locator("#document-confirm").waitFor({ state: "visible" });
+  assert.equal(await page.evaluate(() => qa.saved), undefined);
+  await page.keyboard.press("Escape");
+  await page.locator("#document-confirm").waitFor({ state: "hidden" });
+  assert.equal(await page.locator("#review").isVisible(), true);
+  await page.locator("#copy").click();
+  await page.locator("#document-cancel").click();
+  assert.equal(await page.evaluate(() => qa.saved), undefined);
+  await page.locator("#copy").click();
+  await page.locator("#document-save-anyway").click();
   await page.waitForFunction(() => qa.saved);
   const processed = await page.evaluate(() => qa.saved.bytes);
   assert.notDeepEqual(processed, source);

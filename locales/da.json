@@ -109,5 +109,15 @@
   "privacyStorage": "Tilknytninger forbliver i hukommelsen, medmindre du aktiverer lagring. Kun de seneste 10 samtaler bevares. Ryd alle tilknytninger for at fjerne gemte originaler.",
   "documentHint": "Slip eller vælg en DOCX-, TXT-, CSV- eller Markdown-fil. Gennemgå erstatningerne, før du gemmer en separat kopi. Originalerne ændres ikke.",
   "settingsSave": "Gem genveje",
-  "reviewSuggestion": "Gennemgå forslag (ikke erstattet): $1"
+  "reviewSuggestion": "Gennemgå forslag (ikke erstattet): $1",
+  "docxImages": "Ikke undersøgte billeder: $1",
+  "docxObjects": "Ikke undersøgte indlejrede objekter: $1",
+  "docxFields": "Ikke undersøgte feltkoder: $1; synlige resultater undersøgt.",
+  "docxTracked": "Der er registrerede ændringer; slettet tekst blev undersøgt.",
+  "docxMailReplaced": "Erstattede mål for maillinks: $1",
+  "docxMailKept": "Bevarede mål for maillinks: $1",
+  "docxReviewers": "Bevarede korrekturlæsernavne: $1. Føj dem til ordbogen.",
+  "docxCleaned": "Metadata om korrekturlæserkonti eller dokumentforfattere fjernet.",
+  "docxGeneral": "Billeder, objekter, feltkoder, brugerdefineret XML, links og andre metadata kan stadig indeholde private data. Undersøg dem før deling.",
+  "saveAnyway": "Gem alligevel"
 }

@@ -109,5 +109,15 @@
   "privacyStorage": "Pemetaan kekal dalam ingatan melainkan storan diaktifkan. Hanya 10 perbualan terkini disimpan. Padam semua pemetaan untuk membuang maklumat asal yang disimpan.",
   "documentHint": "Seret atau pilih fail DOCX, TXT, CSV atau Markdown. Semak penggantian sebelum menyimpan salinan berasingan. Fail asal tidak berubah.",
   "settingsSave": "Simpan pintasan",
-  "reviewSuggestion": "Semak cadangan (tidak diganti): $1"
+  "reviewSuggestion": "Semak cadangan (tidak diganti): $1",
+  "docxImages": "Imej yang tidak diperiksa: $1",
+  "docxObjects": "Objek terbenam yang tidak diperiksa: $1",
+  "docxFields": "Kod medan yang tidak diperiksa: $1; hasil yang kelihatan telah diperiksa.",
+  "docxTracked": "Terdapat perubahan dijejak; teks yang dipadam telah diperiksa.",
+  "docxMailReplaced": "Sasaran pautan e-mel yang diganti: $1",
+  "docxMailKept": "Sasaran pautan e-mel yang dikekalkan: $1",
+  "docxReviewers": "Nama penyemak yang dikekalkan: $1. Tambahkannya pada kamus.",
+  "docxCleaned": "Metadata akaun penyemak atau pencipta dokumen dibuang.",
+  "docxGeneral": "Imej, objek, kod medan, XML tersuai, pautan dan metadata lain mungkin masih mengandungi data peribadi. Periksa sebelum berkongsi.",
+  "saveAnyway": "Simpan juga"
 }

@@ -109,5 +109,15 @@
   "privacyStorage": "Pemetaan tetap di memori kecuali penyimpanan diaktifkan. Hanya 10 percakapan terakhir yang disimpan. Hapus semua pemetaan untuk menghapus data asli yang tersimpan.",
   "documentHint": "Tarik atau pilih berkas DOCX, TXT, CSV, atau Markdown. Tinjau penggantian sebelum menyimpan salinan terpisah. Berkas asli tidak berubah.",
   "settingsSave": "Simpan pintasan",
-  "reviewSuggestion": "Tinjau saran (tidak diganti): $1"
+  "reviewSuggestion": "Tinjau saran (tidak diganti): $1",
+  "docxImages": "Gambar yang belum diperiksa: $1",
+  "docxObjects": "Objek tertanam yang belum diperiksa: $1",
+  "docxFields": "Kode bidang yang belum diperiksa: $1; hasil yang terlihat sudah diperiksa.",
+  "docxTracked": "Ada perubahan terlacak; teks yang dihapus sudah diperiksa.",
+  "docxMailReplaced": "Tujuan tautan email yang diganti: $1",
+  "docxMailKept": "Tujuan tautan email yang dipertahankan: $1",
+  "docxReviewers": "Nama peninjau yang dipertahankan: $1. Tambahkan ke kamus.",
+  "docxCleaned": "Metadata akun peninjau atau pembuat dokumen dihapus.",
+  "docxGeneral": "Gambar, objek, kode bidang, XML khusus, tautan, dan metadata lain mungkin masih berisi data pribadi. Periksa sebelum berbagi.",
+  "saveAnyway": "Tetap simpan"
 }

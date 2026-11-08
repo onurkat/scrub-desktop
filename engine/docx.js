@@ -19,22 +19,14 @@ const encode = (s) =>
 export function textModel(xml, base = 0) {
   if (/<!DOCTYPE|<!ENTITY/i.test(xml))
     throw new Error("DOCX XML entities/DTDs are unsupported.");
-  const prefix =
-    /xmlns:([\w]+)=["']http:\/\/schemas.openxmlformats.org\/wordprocessingml\/2006\/main["']/.exec(
-      xml,
-    )?.[1] || "w";
-  // Producers may bind WordprocessingML as the default namespace: un-prefixed element names are then "w:".
-  const defaultNs =
-    /\sxmlns=["']http:\/\/schemas.openxmlformats.org\/wordprocessingml\/2006\/main["']/.test(
-      xml,
-    );
-  if (!defaultNs && !new RegExp("<" + prefix + ":").test(xml) && /<\w+:body\b|<body\b/.test(xml))
-    throw new Error("Unsupported DOCX namespace layout.");
+  const mainNs = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
+  const prefixes = new Set();
+  let rootSeen = false;
   const tokens = /<(?:[^>"']|"[^"]*"|'[^']*')*>|[^<]+/g;
   let text = "",
     nodes = [],
     active = null,
-    field = 0;
+    field = [];
   const stack = [];
   let images = 0,
     objects = 0,
@@ -63,11 +55,20 @@ export function textModel(xml, base = 0) {
     if (!name) continue;
     const closing = token.startsWith("</"),
       self = /\/\s*>$/.test(token);
-    const local = name.startsWith(prefix + ":")
-      ? name.slice(prefix.length + 1)
-      : defaultNs && !name.includes(":")
-        ? name
-        : "";
+    if (!closing) {
+      const bindings = [...token.matchAll(/\sxmlns(?::([\w.-]+))?\s*=\s*(?:"([^"]*)"|'([^']*)')/g)];
+      for (const binding of bindings) {
+        const prefix = binding[1] || "", uri = decode(binding[2] ?? binding[3]);
+        if (rootSeen && (uri === mainNs || prefixes.has(prefix)))
+          throw new Error("Unsupported DOCX namespace redeclaration.");
+        if (uri === mainNs) prefixes.add(prefix);
+      }
+      if (!rootSeen && !prefixes.size && /(?:^|:)document$/.test(name))
+        throw new Error("Unsupported DOCX namespace layout.");
+      rootSeen = true;
+    }
+    const colon = name.indexOf(":"), prefix = colon < 0 ? "" : name.slice(0, colon);
+    const local = prefixes.has(prefix) ? name.slice(colon + 1) : "";
     // Reviewer identities on tracked changes and comments are part of the text model (same numbering/dictionary).
     if (!closing) {
       const author = /\s(?:\w+:)?author=(?:"([^"]*)"|'([^']*)')/.exec(token);
@@ -103,10 +104,17 @@ export function textModel(xml, base = 0) {
     }
     if (local === "fldChar") {
       if (/fldCharType=["']begin/.test(token)) {
-        field++;
+        field.push(false);
         fields++;
       }
-      if (/fldCharType=["']end/.test(token)) field = Math.max(0, field - 1);
+      if (/fldCharType=["']separate/.test(token)) {
+        if (!field.length) throw new Error("Malformed DOCX field separator.");
+        field[field.length - 1] = true;
+      }
+      if (/fldCharType=["']end/.test(token)) {
+        if (!field.length) throw new Error("Malformed DOCX field end.");
+        field.pop();
+      }
     }
     if (local === "fldSimple") fields++;
     if (local === "drawing" || local === "pict") images++;
@@ -118,14 +126,14 @@ export function textModel(xml, base = 0) {
     if (local === "tab" || local === "br" || local === "cr") text += "\t";
     if (
       (local === "t" || local === "delText") &&
-      !field &&
-      !stack.some((s) => s === prefix + ":fldSimple")
+      field.every(Boolean)
     )
       active = { from: at, to: at + token.length, token };
     if (!self) stack.push(name);
     else if (local === "t" || local === "delText") active = null;
   }
   if (stack.length) throw new Error("Unclosed DOCX XML element.");
+  if (field.length) throw new Error("Unclosed DOCX field.");
   return { text, nodes, images, objects, fields, tracked };
 }
 export function loadDocx(bytes) {
@@ -280,7 +288,7 @@ export function scrubDocx(bytes, policy = {}) {
   for (const [key, label] of [
     ["images", "images"],
     ["objects", "embedded objects"],
-    ["fields", "fields"],
+    ["fields", "field instructions (including HYPERLINK/MAILTO codes; visible results inspected)"],
   ]) {
     const n = doc.models.reduce((s, m) => s + m[key], 0);
     if (n) skipped.push(n + " " + label + " not inspected");

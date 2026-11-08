@@ -5,6 +5,7 @@ import { serve } from "./server.mjs";
 const server = await serve(),
   b = await browser();
 const results = [];
+const documentBytes = Array.from(await readFile("test/fixtures/contract.docx"));
 await mkdir("qa/screens", { recursive: true });
 try {
   for (const file of (await readdir("locales")).filter(
@@ -33,6 +34,27 @@ try {
         if (view === "scrub") {
           await page.locator("#input").fill("alex@example.com +44 7700 900123");
           await page.locator("#run").click();
+        }
+        if (view === "documents") {
+          await page.evaluate((bytes) => {
+            qa.file = { name: "contract.docx", bytes };
+          }, documentBytes);
+          await page.locator("#choose-document").click();
+          await page.locator("#document-scrub").click();
+          await page.waitForFunction(
+            () => !document.querySelector("#document-warnings").hidden,
+          );
+          assert(
+            (await page.locator("#document-warnings").textContent()).includes(
+              dict.docxImages.replace("$1", "2"),
+            ),
+          );
+          await page.locator("#copy").click();
+          assert.equal(
+            await page.locator("#document-save-anyway").textContent(),
+            dict.saveAnyway,
+          );
+          await page.locator("#document-cancel").click();
         }
         const overflow = await page.evaluate(
           () => document.documentElement.scrollWidth > innerWidth,

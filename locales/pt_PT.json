@@ -109,5 +109,15 @@
   "privacyStorage": "Os mapeamentos ficam na memória, salvo se ativar o armazenamento. São mantidas apenas as últimas 10 conversas. Limpe todos os mapeamentos para remover os originais guardados.",
   "documentHint": "Arraste ou escolha um ficheiro DOCX, TXT, CSV ou Markdown. Reveja as substituições antes de guardar uma cópia separada. Os originais não mudam.",
   "settingsSave": "Guardar atalhos",
-  "reviewSuggestion": "Rever sugestão (não substituída): $1"
+  "reviewSuggestion": "Rever sugestão (não substituída): $1",
+  "docxImages": "Imagens não inspecionadas: $1",
+  "docxObjects": "Objetos incorporados não inspecionados: $1",
+  "docxFields": "Códigos de campo não inspecionados: $1; resultados visíveis inspecionados.",
+  "docxTracked": "Existem alterações registadas; o texto eliminado foi inspecionado.",
+  "docxMailReplaced": "Destinos de ligações de e-mail substituídos: $1",
+  "docxMailKept": "Destinos de ligações de e-mail mantidos: $1",
+  "docxReviewers": "Nomes de revisores mantidos: $1. Adicione-os ao dicionário.",
+  "docxCleaned": "Metadados de contas de revisores ou autores do documento removidos.",
+  "docxGeneral": "Imagens, objetos, códigos de campo, XML personalizado, ligações e outros metadados ainda podem conter dados privados. Inspecione antes de partilhar.",
+  "saveAnyway": "Guardar na mesma"
 }

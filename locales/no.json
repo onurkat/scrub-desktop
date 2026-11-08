@@ -109,5 +109,15 @@
   "privacyStorage": "Koblinger blir i minnet med mindre du aktiverer lagring. Bare de siste 10 samtalene beholdes. Fjern alle koblinger for å slette lagrede originaler.",
   "documentHint": "Slipp eller velg en DOCX-, TXT-, CSV- eller Markdown-fil. Gjennomgå erstatningene før du lagrer en egen kopi. Originalene endres ikke.",
   "settingsSave": "Lagre hurtigtaster",
-  "reviewSuggestion": "Gå gjennom forslag (ikke erstattet): $1"
+  "reviewSuggestion": "Gå gjennom forslag (ikke erstattet): $1",
+  "docxImages": "Bilder som ikke er undersøkt: $1",
+  "docxObjects": "Innebygde objekter som ikke er undersøkt: $1",
+  "docxFields": "Feltkoder som ikke er undersøkt: $1; synlige resultater undersøkt.",
+  "docxTracked": "Sporede endringer finnes; slettet tekst er undersøkt.",
+  "docxMailReplaced": "Erstattede mål for e-postlenker: $1",
+  "docxMailKept": "Beholdte mål for e-postlenker: $1",
+  "docxReviewers": "Beholdte korrekturlesernavn: $1. Legg dem til i ordboken.",
+  "docxCleaned": "Metadata om korrekturleserkontoer eller dokumentforfattere fjernet.",
+  "docxGeneral": "Bilder, objekter, feltkoder, egendefinert XML, lenker og andre metadata kan fortsatt inneholde private data. Undersøk før deling.",
+  "saveAnyway": "Lagre likevel"
 }

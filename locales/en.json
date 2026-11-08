@@ -109,5 +109,15 @@
   "privacyStorage": "Mappings stay in memory unless you enable storage. Only the latest 10 conversations are retained. Clear all mappings to remove saved originals.",
   "documentHint": "Drop or choose a DOCX, TXT, CSV or Markdown file. Review replacements before saving a separate copy. Originals remain unchanged.",
   "settingsSave": "Save shortcuts",
-  "reviewSuggestion": "Review suggestion (not replaced): $1"
+  "reviewSuggestion": "Review suggestion (not replaced): $1",
+  "docxImages": "Images not inspected: $1",
+  "docxObjects": "Embedded objects not inspected: $1",
+  "docxFields": "Field codes not inspected: $1; visible results inspected.",
+  "docxTracked": "Tracked changes are present; deleted text was inspected.",
+  "docxMailReplaced": "Mail link targets replaced: $1",
+  "docxMailKept": "Mail link targets retained: $1",
+  "docxReviewers": "Reviewer names retained: $1. Add them to the dictionary.",
+  "docxCleaned": "Reviewer account or document creator metadata removed.",
+  "docxGeneral": "Images, objects, field codes, custom XML, links and other metadata may still contain private data. Inspect before sharing.",
+  "saveAnyway": "Save anyway"
 }

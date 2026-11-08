@@ -109,5 +109,15 @@
   "privacyStorage": "除非啟用儲存，否則對應表僅保留在記憶體中。僅保留最近 10 個對話。清除所有對應表即可刪除已儲存的原始資訊。",
   "documentHint": "拖入或選擇 DOCX、TXT、CSV 或 Markdown 檔案。檢查取代內容後另存副本。原始檔案保持不變。",
   "settingsSave": "儲存快捷鍵",
-  "reviewSuggestion": "待檢查的建議（未取代）：$1"
+  "reviewSuggestion": "待檢查的建議（未取代）：$1",
+  "docxImages": "未檢查的圖片：$1",
+  "docxObjects": "未檢查的內嵌物件：$1",
+  "docxFields": "未檢查的功能變數代碼：$1；已檢查可見結果。",
+  "docxTracked": "存在追蹤修訂；已檢查刪除的文字。",
+  "docxMailReplaced": "已取代的郵件連結目標：$1",
+  "docxMailKept": "保留的郵件連結目標：$1",
+  "docxReviewers": "保留的校閱者姓名：$1。請將其加入字典。",
+  "docxCleaned": "已移除校閱者帳戶或文件作者的中繼資料。",
+  "docxGeneral": "圖片、物件、功能變數代碼、自訂 XML、連結及其他中繼資料仍可能包含私人資料。請在分享前檢查。",
+  "saveAnyway": "仍然儲存"
 }

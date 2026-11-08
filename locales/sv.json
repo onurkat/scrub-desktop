@@ -109,5 +109,15 @@
   "privacyStorage": "Mappningar finns i minnet om du inte aktiverar lagring. Bara de senaste 10 samtalen behålls. Rensa alla mappningar för att ta bort sparade original.",
   "documentHint": "Släpp eller välj en DOCX-, TXT-, CSV- eller Markdown-fil. Granska ersättningarna innan du sparar en separat kopia. Originalen ändras inte.",
   "settingsSave": "Spara kortkommandon",
-  "reviewSuggestion": "Granska förslag (inte ersatt): $1"
+  "reviewSuggestion": "Granska förslag (inte ersatt): $1",
+  "docxImages": "Ej granskade bilder: $1",
+  "docxObjects": "Ej granskade inbäddade objekt: $1",
+  "docxFields": "Ej granskade fältkoder: $1; synliga resultat granskade.",
+  "docxTracked": "Spårade ändringar finns; borttagen text har granskats.",
+  "docxMailReplaced": "Ersatta mål för e-postlänkar: $1",
+  "docxMailKept": "Behållna mål för e-postlänkar: $1",
+  "docxReviewers": "Behållna granskarnamn: $1. Lägg till dem i ordlistan.",
+  "docxCleaned": "Metadata om granskarkonton eller dokumentförfattare borttagna.",
+  "docxGeneral": "Bilder, objekt, fältkoder, anpassad XML, länkar och andra metadata kan fortfarande innehålla privata uppgifter. Granska före delning.",
+  "saveAnyway": "Spara ändå"
 }

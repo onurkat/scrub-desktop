@@ -109,5 +109,15 @@
   "privacyStorage": "Les correspondances restent en mémoire sauf si vous activez leur stockage. Seules les 10 dernières conversations sont conservées. Effacez toutes les correspondances pour supprimer les originaux enregistrés.",
   "documentHint": "Déposez ou choisissez un fichier DOCX, TXT, CSV ou Markdown. Vérifiez les remplacements avant d’enregistrer une copie distincte. Les originaux restent inchangés.",
   "settingsSave": "Enregistrer les raccourcis",
-  "reviewSuggestion": "Suggestion à vérifier (non remplacée) : $1"
+  "reviewSuggestion": "Suggestion à vérifier (non remplacée) : $1",
+  "docxImages": "Images non inspectées : $1",
+  "docxObjects": "Objets intégrés non inspectés : $1",
+  "docxFields": "Codes de champ non inspectés : $1 ; résultats visibles inspectés.",
+  "docxTracked": "Modifications suivies présentes ; texte supprimé inspecté.",
+  "docxMailReplaced": "Destinations de liens e-mail remplacées : $1",
+  "docxMailKept": "Destinations de liens e-mail conservées : $1",
+  "docxReviewers": "Noms de réviseurs conservés : $1. Ajoutez-les au dictionnaire.",
+  "docxCleaned": "Métadonnées des comptes de réviseurs ou des auteurs supprimées.",
+  "docxGeneral": "Les images, objets, codes de champ, XML personnalisé, liens et autres métadonnées peuvent encore contenir des données privées. Vérifiez avant de partager.",
+  "saveAnyway": "Enregistrer quand même"
 }

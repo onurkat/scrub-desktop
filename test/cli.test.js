@@ -85,7 +85,7 @@ test("DOCX requires output and round-trips through a named mapping", async () =>
     map = dir + "/map.json";
   assert.equal(run(["test/fixtures/contract.docx"]).status, 1);
   assert.equal(
-    run(["test/fixtures/contract.docx", "--out", out, "--mapping", map]).status,
+    run(["test/fixtures/contract.docx", "--out", out, "--mapping", map, "--save-anyway"]).status,
     0,
   );
   assert.equal(

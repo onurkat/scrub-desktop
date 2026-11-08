@@ -109,5 +109,15 @@
   "privacyStorage": "Mapování zůstávají v paměti, pokud nezapnete ukládání. Uchovává se posledních 10 konverzací. Vymazáním všech mapování odstraníte uložené originály.",
   "documentHint": "Přetáhněte nebo vyberte soubor DOCX, TXT, CSV či Markdown. Před uložením samostatné kopie zkontrolujte náhrady. Originály zůstávají nezměněné.",
   "settingsSave": "Uložit zkratky",
-  "reviewSuggestion": "Zkontrolujte návrh (nenahrazeno): $1"
+  "reviewSuggestion": "Zkontrolujte návrh (nenahrazeno): $1",
+  "docxImages": "Nezkontrolované obrázky: $1",
+  "docxObjects": "Nezkontrolované vložené objekty: $1",
+  "docxFields": "Nezkontrolované kódy polí: $1; viditelné výsledky zkontrolovány.",
+  "docxTracked": "Dokument obsahuje sledované změny; odstraněný text byl zkontrolován.",
+  "docxMailReplaced": "Nahrazené cíle e-mailových odkazů: $1",
+  "docxMailKept": "Zachované cíle e-mailových odkazů: $1",
+  "docxReviewers": "Zachovaná jména recenzentů: $1. Přidejte je do slovníku.",
+  "docxCleaned": "Metadata účtů recenzentů nebo autorů dokumentu odstraněna.",
+  "docxGeneral": "Obrázky, objekty, kódy polí, vlastní XML, odkazy a další metadata mohou stále obsahovat soukromé údaje. Před sdílením je zkontrolujte.",
+  "saveAnyway": "Přesto uložit"
 }

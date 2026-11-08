@@ -14,10 +14,12 @@
     "cli/",
     "engine/",
     "LICENSE",
-    "README.md"
+    "README.md",
+    "locales/*.json",
+    "!locales/_context.json"
   ],
   "scripts": {
-    "test": "node --test",
+    "test": "node --test test/*.test.js",
     "sync-engine": "node tools/sync-engine.js",
     "tauri": "tauri",
     "pretest": "node tools/prepare-ui.js"

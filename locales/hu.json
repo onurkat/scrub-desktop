@@ -109,5 +109,15 @@
   "privacyStorage": "A megfeleltetések a memóriában maradnak, amíg nem engedélyezi a tárolást. Az utolsó 10 beszélgetést őrizzük meg. Az összes megfeleltetés törlésével eltávolíthatja a mentett eredeti adatokat.",
   "documentHint": "Húzzon ide vagy válasszon DOCX-, TXT-, CSV- vagy Markdown-fájlt. Külön másolat mentése előtt ellenőrizze a cseréket. Az eredetiek változatlanok maradnak.",
   "settingsSave": "Gyorsbillentyűk mentése",
-  "reviewSuggestion": "Ellenőrizendő javaslat (nincs cserélve): $1"
+  "reviewSuggestion": "Ellenőrizendő javaslat (nincs cserélve): $1",
+  "docxImages": "Nem vizsgált képek: $1",
+  "docxObjects": "Nem vizsgált beágyazott objektumok: $1",
+  "docxFields": "Nem vizsgált mezőkódok: $1; a látható eredmények ellenőrizve.",
+  "docxTracked": "Követett változtatások vannak; a törölt szöveg ellenőrizve.",
+  "docxMailReplaced": "Lecserélt e-mail-hivatkozási célok: $1",
+  "docxMailKept": "Megtartott e-mail-hivatkozási célok: $1",
+  "docxReviewers": "Megtartott véleményezőnevek: $1. Adja hozzá őket a szótárhoz.",
+  "docxCleaned": "A véleményezői fiókok vagy dokumentumszerzők metaadatai eltávolítva.",
+  "docxGeneral": "A képek, objektumok, mezőkódok, egyéni XML, hivatkozások és más metaadatok még tartalmazhatnak magánadatokat. Megosztás előtt ellenőrizze őket.",
+  "saveAnyway": "Mentés mindenképpen"
 }

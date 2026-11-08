@@ -4,7 +4,7 @@ export async function checkLocales(prune = false) {
   const source =
     (await readFile("ui/index.html", "utf8")) +
     "\n" +
-    (await readFile("ui/js/app.js", "utf8"));
+    (await readFile("ui/js/app.js", "utf8")) + (await readFile("cli/docx-warnings.js", "utf8"));
   const keys = Object.keys(base).filter(
     (key) =>
       ["lang", "dir"].includes(key) ||

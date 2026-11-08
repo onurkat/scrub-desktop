@@ -92,3 +92,11 @@ All six `qa/screens/*-clipboard-review-{light,dark}.png` screenshots were review
 the first category and all primary actions are visible in each. Six affected
 full-window Scrub screenshots were also refreshed. Native X11 emitted the known
 host accessibility-bus warning, but all clipboard/hotkey assertions passed.
+
+## DOCX warning delivery (2026-11-08)
+
+Engine synced from 9ed0c6b with byte/hash parity. Documents displays content-free categories and counts from `report.skipped` in all 34 languages before saving. A conservative confirmation applies whenever the report contains notices (the general DOCX notice is always present). Cancel and Escape preserve the review without writing a document or mapping. CLI prints localized notices to stderr and requires `--save-anyway` before writing either output or mapping; `--language` overrides the environment locale.
+
+Validation: Node 20 and Node 22 `npm test` each pass 14/14, including upstream parity, warning normalization/privacy and CLI refusal/approval. `cargo clippy --all-targets -- -D warnings` passes. `tools/qa/documents.mjs` checks Cancel, Escape, approval, mapping export and DOCX restore. The i18n matrix passes 340 views at 480/800 pixels, checks translated warning/confirmation labels in every locale and refreshes the six Documents screenshots. Arabic dark Documents screenshot inspected for wrapping and RTL alignment. npm tarball contains 47 files, including all 34 locale dictionaries and the warning adapter, excluding internal documents/context; extracted CLI successfully writes a DOCX with Turkish warnings and explicit approval.
+
+`npm test` names `test/*.test.js` explicitly to support both Node versions without recursively discovering generated build artifacts. Field instructions remain opaque in this engine revision and receive a specific warning; follow-up engine audit work is tracked separately.

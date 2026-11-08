@@ -198,6 +198,7 @@
             data-i18n="restoreDocument"
           ></button>
         </div>
+        <ul id="document-warnings" role="status" hidden></ul>
         <pre id="document-preview" hidden tabindex="0"></pre>
         <div class="actions">
           <button id="document-save" hidden data-i18n="saveDocument"></button
@@ -270,6 +271,13 @@
         <button id="confirm-no" data-i18n="barCancel"></button
         ><button id="confirm-yes" data-i18n="delete"></button>
       </div>
+    </dialog>
+    <dialog id="document-confirm" aria-labelledby="document-confirm-text">
+      <p id="document-confirm-text" data-i18n="docxGeneral"></p>
+      <form method="dialog" class="actions">
+        <button id="document-cancel" value="cancel" data-i18n="barCancel"></button>
+        <button id="document-save-anyway" value="save" data-i18n="saveAnyway"></button>
+      </form>
     </dialog>
   </body>
 </html>

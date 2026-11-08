@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { docxWarnings } from "./docx-warnings.js";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
 import { scrub } from "../engine/scrub.js";
@@ -7,6 +8,7 @@ import { restoreDocx } from "../engine/docx.js";
 import { importDictionary } from "../engine/dictionary.js";
 import { atomicPrivate, lastMapping, saveMapping } from "./store.js";
 const usage = `Usage: scrub [FILE|-] [--out FILE] [--dictionary CSV] [--policy JSON]
+             [--language CODE] [--save-anyway]
              [--mapping FILE] [--continue FILE] [--keep] [--report] [--json] [--fail-on-detect]
        scrub restore [FILE|-] (--mapping FILE | --last) [--out FILE] [--json]
 Text defaults to stdin/stdout. DOCX requires --out. Mapping storage is opt-in.
@@ -44,6 +46,7 @@ async function main() {
     "--policy",
     "--mapping",
     "--continue",
+    "--language",
   ]);
   const flags = new Set([
     "--keep",
@@ -51,6 +54,7 @@ async function main() {
     "--json",
     "--fail-on-detect",
     "--last",
+    "--save-anyway",
   ]);
   for (let i = 0; i < args.length; i++) {
     const a = args[i];
@@ -163,6 +167,33 @@ async function main() {
       );
     } catch {
       throw new Failure("Cannot scrub: invalid policy, mapping or document.");
+    }
+    const warnings = docxWarnings(result.report?.skipped);
+    if (warnings.length) {
+      const requested =
+        opts["--language"] || process.env.LC_ALL || process.env.LANG || "en";
+      const code = requested.split(".")[0].replace("-", "_");
+      let locale;
+      for (const candidate of [code, code.split("_")[0], "en"]) {
+        if (!/^[a-z]{2}(?:_[A-Z]{2})?$/.test(candidate)) continue;
+        try {
+          locale = JSON.parse(
+            await readFile(
+              new URL(`../locales/${candidate}.json`, import.meta.url),
+              "utf8",
+            ),
+          );
+          break;
+        } catch (error) {
+          if (error.code !== "ENOENT") throw error;
+        }
+      }
+      const translate = (key, ...args) =>
+        locale[key].replace(/\$(\d+)/g, (_, n) => String(args[Number(n) - 1]));
+      for (const [key, ...args] of warnings)
+        process.stderr.write(translate(key, ...args) + "\n");
+      if (!opts["--save-anyway"])
+        throw new Failure(translate("saveAnyway") + ": --save-anyway", 1);
     }
     if (opts["--mapping"])
       await atomicPrivate(

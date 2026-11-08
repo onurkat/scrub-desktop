@@ -89,6 +89,8 @@ scrub restore answer.txt --mapping conversation.json > restored.txt
 
 `--continue conversation.json` reuses a mapping. `--policy policy.json` passes detector/dictionary options to the shared engine. `--json` emits structured output. DOCX requires `--out output.docx`, including for restoration. Text defaults to stdin/stdout; `-` explicitly selects stdin. Exit codes are 0 success, 1 usage, 2 input/output error, and 3 detection with `--fail-on-detect`.
 
+DOCX warnings are printed to stderr in the system language (or `--language tr`, for example), using categories and counts without original values. Inspect the document before sharing. Re-run with `--save-anyway` to write a DOCX with uninspected content; without it, neither output nor mapping is saved. The desktop Documents tab presents the same warnings and requires **Save anyway**.
+
 `--keep` explicitly saves a mapping in the desktop’s shared store; `scrub restore --last` uses it. Without `--keep`, the CLI writes only output/mapping files you explicitly request.
 
 ## Privacy and local data

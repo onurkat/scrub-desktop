@@ -109,5 +109,15 @@
   "privacyStorage": "Koppelingen blijven in het geheugen tenzij je opslag inschakelt. Alleen de laatste 10 gesprekken worden bewaard. Wis alle koppelingen om opgeslagen originelen te verwijderen.",
   "documentHint": "Sleep of kies een DOCX-, TXT-, CSV- of Markdown-bestand. Controleer vervangingen voor je een aparte kopie opslaat. Originelen blijven ongewijzigd.",
   "settingsSave": "Sneltoetsen opslaan",
-  "reviewSuggestion": "Suggestie controleren (niet vervangen): $1"
+  "reviewSuggestion": "Suggestie controleren (niet vervangen): $1",
+  "docxImages": "Niet onderzochte afbeeldingen: $1",
+  "docxObjects": "Niet onderzochte ingesloten objecten: $1",
+  "docxFields": "Niet onderzochte veldcodes: $1; zichtbare resultaten onderzocht.",
+  "docxTracked": "Bijgehouden wijzigingen aanwezig; verwijderde tekst is onderzocht.",
+  "docxMailReplaced": "Vervangen e-maillinkdoelen: $1",
+  "docxMailKept": "Behouden e-maillinkdoelen: $1",
+  "docxReviewers": "Behouden namen van revisoren: $1. Voeg ze toe aan het woordenboek.",
+  "docxCleaned": "Metagegevens van revisoraccounts of documentauteurs verwijderd.",
+  "docxGeneral": "Afbeeldingen, objecten, veldcodes, aangepaste XML, links en andere metagegevens kunnen nog privégegevens bevatten. Controleer vóór het delen.",
+  "saveAnyway": "Toch opslaan"
 }

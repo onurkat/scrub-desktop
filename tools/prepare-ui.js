@@ -29,3 +29,5 @@ await writeFile(
   new URL("../ui/js/locales.js", import.meta.url),
   "export default " + JSON.stringify(locales) + ";\n",
 );
+
+await copyFile("cli/docx-warnings.js", "ui/vendor/docx-warnings.js");

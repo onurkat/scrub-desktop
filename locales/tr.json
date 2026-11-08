@@ -109,5 +109,15 @@
   "privacyStorage": "Kaydetmeyi etkinleştirmediğiniz sürece eşlemeler bellekte kalır. Yalnızca son 10 konuşma tutulur. Kaydedilmiş asılları silmek için tüm eşlemeleri temizleyin.",
   "documentHint": "DOCX, TXT, CSV veya Markdown dosyasını sürükleyin ya da seçin. Ayrı bir kopya kaydetmeden önce değişiklikleri inceleyin. Asıllar değişmez.",
   "settingsSave": "Kısayolları kaydet",
-  "reviewSuggestion": "Öneriyi inceleyin (değiştirilmedi): $1"
+  "reviewSuggestion": "Öneriyi inceleyin (değiştirilmedi): $1",
+  "docxImages": "İncelenmeyen görseller: $1",
+  "docxObjects": "İncelenmeyen gömülü nesneler: $1",
+  "docxFields": "İncelenmeyen alan kodları: $1; görünen sonuçlar incelendi.",
+  "docxTracked": "İzlenen değişiklikler var; silinen metin incelendi.",
+  "docxMailReplaced": "Değiştirilen e-posta bağlantısı hedefleri: $1",
+  "docxMailKept": "Korunan e-posta bağlantısı hedefleri: $1",
+  "docxReviewers": "Korunan gözden geçiren adları: $1. Bunları sözlüğe ekleyin.",
+  "docxCleaned": "Gözden geçiren hesabı veya belge yazarı meta verileri kaldırıldı.",
+  "docxGeneral": "Görseller, nesneler, alan kodları, özel XML, bağlantılar ve diğer meta veriler hâlâ özel veri içerebilir. Paylaşmadan önce inceleyin.",
+  "saveAnyway": "Yine de kaydet"
 }

@@ -109,5 +109,15 @@
   "privacyStorage": "Vastaavuudet pysyvät muistissa, ellet ota tallennusta käyttöön. Vain 10 uusinta keskustelua säilytetään. Poista kaikki vastaavuudet poistaaksesi tallennetut alkuperäiset tiedot.",
   "documentHint": "Pudota tai valitse DOCX-, TXT-, CSV- tai Markdown-tiedosto. Tarkista korvaukset ennen erillisen kopion tallennusta. Alkuperäiset säilyvät ennallaan.",
   "settingsSave": "Tallenna pikanäppäimet",
-  "reviewSuggestion": "Tarkista ehdotus (ei korvattu): $1"
+  "reviewSuggestion": "Tarkista ehdotus (ei korvattu): $1",
+  "docxImages": "Tarkistamattomat kuvat: $1",
+  "docxObjects": "Tarkistamattomat upotetut objektit: $1",
+  "docxFields": "Tarkistamattomat kenttäkoodit: $1; näkyvät tulokset tarkistettu.",
+  "docxTracked": "Muutosseuranta käytössä; poistettu teksti tarkistettiin.",
+  "docxMailReplaced": "Korvatut sähköpostilinkkien kohteet: $1",
+  "docxMailKept": "Säilytetyt sähköpostilinkkien kohteet: $1",
+  "docxReviewers": "Säilytetyt tarkistajien nimet: $1. Lisää ne sanastoon.",
+  "docxCleaned": "Tarkistajatilien tai asiakirjan tekijöiden metatiedot poistettu.",
+  "docxGeneral": "Kuvat, objektit, kenttäkoodit, mukautettu XML, linkit ja muut metatiedot voivat yhä sisältää yksityisiä tietoja. Tarkista ennen jakamista.",
+  "saveAnyway": "Tallenna silti"
 }

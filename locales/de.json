@@ -109,5 +109,15 @@
   "privacyStorage": "Zuordnungen bleiben ohne aktivierte Speicherung im Arbeitsspeicher. Die letzten 10 Unterhaltungen werden aufbewahrt. Lösche alle Zuordnungen, um gespeicherte Originale zu entfernen.",
   "documentHint": "DOCX-, TXT-, CSV- oder Markdown-Datei ablegen oder wählen. Ersetzungen prüfen und eine separate Kopie speichern. Originale bleiben unverändert.",
   "settingsSave": "Tastenkürzel speichern",
-  "reviewSuggestion": "Vorschlag prüfen (nicht ersetzt): $1"
+  "reviewSuggestion": "Vorschlag prüfen (nicht ersetzt): $1",
+  "docxImages": "Nicht geprüfte Bilder: $1",
+  "docxObjects": "Nicht geprüfte eingebettete Objekte: $1",
+  "docxFields": "Nicht geprüfte Feldcodes: $1; sichtbare Ergebnisse wurden geprüft.",
+  "docxTracked": "Änderungsverfolgung vorhanden; gelöschter Text wurde geprüft.",
+  "docxMailReplaced": "Ersetzte E-Mail-Linkziele: $1",
+  "docxMailKept": "Beibehaltene E-Mail-Linkziele: $1",
+  "docxReviewers": "Beibehaltene Prüfernamen: $1. Füge sie dem Wörterbuch hinzu.",
+  "docxCleaned": "Metadaten zu Prüferkonten oder Dokumentautoren entfernt.",
+  "docxGeneral": "Bilder, Objekte, Feldcodes, benutzerdefiniertes XML, Links und weitere Metadaten können noch private Daten enthalten. Vor dem Teilen prüfen.",
+  "saveAnyway": "Trotzdem speichern"
 }

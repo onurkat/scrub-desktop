@@ -119,5 +119,6 @@
   "docxReviewers": "Tên người duyệt được giữ lại: $1. Hãy thêm vào từ điển.",
   "docxCleaned": "Đã xóa siêu dữ liệu tài khoản người duyệt hoặc tác giả tài liệu.",
   "docxGeneral": "Hình ảnh, đối tượng, mã trường, XML tùy chỉnh, liên kết và siêu dữ liệu khác vẫn có thể chứa dữ liệu riêng tư. Kiểm tra trước khi chia sẻ.",
-  "saveAnyway": "Vẫn lưu"
+  "saveAnyway": "Vẫn lưu",
+  "docxRelationships": "Tệp quan hệ có nội dung khác chưa được kiểm tra: $1"
 }

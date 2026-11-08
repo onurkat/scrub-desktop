@@ -68,3 +68,7 @@ test("numeric retained mail diagnostics preserve counts without showing targets"
     [["docxMailKept", 3]],
   );
 });
+
+test('uninspected-owner relationships have a dedicated translated category', () => {
+  assert.deepEqual(docxWarnings(['2 relationship parts belonging to uninspected content not inspected']), [['docxRelationships', 2]]);
+});

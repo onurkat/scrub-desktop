@@ -119,5 +119,6 @@
   "docxReviewers": "Zachovaná jména recenzentů: $1. Přidejte je do slovníku.",
   "docxCleaned": "Metadata účtů recenzentů nebo autorů dokumentu odstraněna.",
   "docxGeneral": "Obrázky, objekty, kódy polí, vlastní XML, odkazy a další metadata mohou stále obsahovat soukromé údaje. Před sdílením je zkontrolujte.",
-  "saveAnyway": "Přesto uložit"
+  "saveAnyway": "Přesto uložit",
+  "docxRelationships": "Soubory vztahů s dalším nezkontrolovaným obsahem: $1"
 }

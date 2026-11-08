@@ -119,5 +119,6 @@
   "docxReviewers": "Reviewer names retained: $1. Add them to the dictionary.",
   "docxCleaned": "Reviewer account or document creator metadata removed.",
   "docxGeneral": "Images, objects, field codes, custom XML, links and other metadata may still contain private data. Inspect before sharing.",
-  "saveAnyway": "Save anyway"
+  "saveAnyway": "Save anyway",
+  "docxRelationships": "Relationship files with other uninspected content: $1"
 }

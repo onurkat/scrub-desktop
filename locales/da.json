@@ -119,5 +119,6 @@
   "docxReviewers": "Bevarede korrekturlæsernavne: $1. Føj dem til ordbogen.",
   "docxCleaned": "Metadata om korrekturlæserkonti eller dokumentforfattere fjernet.",
   "docxGeneral": "Billeder, objekter, feltkoder, brugerdefineret XML, links og andre metadata kan stadig indeholde private data. Undersøg dem før deling.",
-  "saveAnyway": "Gem alligevel"
+  "saveAnyway": "Gem alligevel",
+  "docxRelationships": "Relationsfiler med andet ikke undersøgt indhold: $1"
 }

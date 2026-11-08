@@ -119,5 +119,6 @@
   "docxReviewers": "保留的审阅者姓名：$1。请将其添加到词典。",
   "docxCleaned": "已移除审阅者账户或文档作者的元数据。",
   "docxGeneral": "图片、对象、域代码、自定义 XML、链接及其他元数据仍可能包含隐私数据。请在分享前检查。",
-  "saveAnyway": "仍然保存"
+  "saveAnyway": "仍然保存",
+  "docxRelationships": "包含其他未检查内容的关系文件：$1"
 }

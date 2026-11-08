@@ -119,5 +119,6 @@
   "docxReviewers": "Nama peninjau yang dipertahankan: $1. Tambahkan ke kamus.",
   "docxCleaned": "Metadata akun peninjau atau pembuat dokumen dihapus.",
   "docxGeneral": "Gambar, objek, kode bidang, XML khusus, tautan, dan metadata lain mungkin masih berisi data pribadi. Periksa sebelum berbagi.",
-  "saveAnyway": "Tetap simpan"
+  "saveAnyway": "Tetap simpan",
+  "docxRelationships": "File relasi dengan konten lain yang belum diperiksa: $1"
 }

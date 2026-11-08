@@ -119,5 +119,6 @@
   "docxReviewers": "Nama penyemak yang dikekalkan: $1. Tambahkannya pada kamus.",
   "docxCleaned": "Metadata akaun penyemak atau pencipta dokumen dibuang.",
   "docxGeneral": "Imej, objek, kod medan, XML tersuai, pautan dan metadata lain mungkin masih mengandungi data peribadi. Periksa sebelum berkongsi.",
-  "saveAnyway": "Simpan juga"
+  "saveAnyway": "Simpan juga",
+  "docxRelationships": "Fail hubungan dengan kandungan lain yang belum diperiksa: $1"
 }

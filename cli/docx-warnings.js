@@ -10,6 +10,12 @@ export function docxWarnings(skipped = []) {
       notices.push(["docxObjects", n]);
     else if (/^\d+ (fields|field instructions).*not inspected$/.test(message))
       notices.push(["docxFields", n]);
+    else if (
+      /^\d+ relationship parts belonging to uninspected content not inspected$/.test(
+        message,
+      )
+    )
+      notices.push(["docxRelationships", n]);
     else if (message.startsWith("tracked changes present"))
       notices.push(["docxTracked"]);
     else if (/^\d+ mailto: hyperlink targets kept/.test(message))

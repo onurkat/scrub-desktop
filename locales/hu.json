@@ -119,5 +119,6 @@
   "docxReviewers": "Megtartott véleményezőnevek: $1. Adja hozzá őket a szótárhoz.",
   "docxCleaned": "A véleményezői fiókok vagy dokumentumszerzők metaadatai eltávolítva.",
   "docxGeneral": "A képek, objektumok, mezőkódok, egyéni XML, hivatkozások és más metaadatok még tartalmazhatnak magánadatokat. Megosztás előtt ellenőrizze őket.",
-  "saveAnyway": "Mentés mindenképpen"
+  "saveAnyway": "Mentés mindenképpen",
+  "docxRelationships": "Egyéb, nem ellenőrzött tartalmú kapcsolatfájlok: $1"
 }

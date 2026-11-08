@@ -119,5 +119,6 @@
   "docxReviewers": "Säilytetyt tarkistajien nimet: $1. Lisää ne sanastoon.",
   "docxCleaned": "Tarkistajatilien tai asiakirjan tekijöiden metatiedot poistettu.",
   "docxGeneral": "Kuvat, objektit, kenttäkoodit, mukautettu XML, linkit ja muut metatiedot voivat yhä sisältää yksityisiä tietoja. Tarkista ennen jakamista.",
-  "saveAnyway": "Tallenna silti"
+  "saveAnyway": "Tallenna silti",
+  "docxRelationships": "Suhdetiedostot, joissa on muuta tarkistamatonta sisältöä: $1"
 }

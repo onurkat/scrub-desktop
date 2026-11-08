@@ -108,3 +108,9 @@ Engine updated to eee8f69: field instruction values now scrub/restore and every 
 ### Glossary relationship sync
 
 Engine synced from 95c22e2. Nested relationships now scrub/restore visible and target-only mail addresses; unhandled owners and unrecognised targets are reported. Numeric retained-mail diagnostics use the existing translated count key, with a regression assertion. Node 20/22 each pass 15/15 tests (including upstream parity); Documents save/restore QA passes after sync.
+
+### AUDIT-010 sync and warnings
+
+Engine 99ac4f8 removes complete mailto queries (restorable through the mapping) and scrubs mailto targets in uninspected-owner relationship parts too. `docxRelationships` has translations in all 34 locales and is used by both Documents and CLI; numeric counts never expose target values. Node 20/22 each pass 17 tests, including a CLI chart-target privacy/localization regression. Documents save/restore QA passes. The locale UI matrix now includes a chart relationship and asserts the dedicated translated warning in every language.
+
+AUDIT-010 UI verification completed: 340 localized views pass at 480/800 pixels; six Documents screenshots refreshed and Arabic dark warning wrapping/RTL inspected. Locale validation reports 34 locales and 122 used keys.

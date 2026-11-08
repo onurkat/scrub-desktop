@@ -119,5 +119,6 @@
   "docxReviewers": "Zachowane nazwiska recenzentów: $1. Dodaj je do słownika.",
   "docxCleaned": "Usunięto metadane kont recenzentów lub autorów dokumentu.",
   "docxGeneral": "Obrazy, obiekty, kody pól, niestandardowy XML, odsyłacze i inne metadane mogą nadal zawierać prywatne dane. Sprawdź je przed udostępnieniem.",
-  "saveAnyway": "Zapisz mimo to"
+  "saveAnyway": "Zapisz mimo to",
+  "docxRelationships": "Pliki relacji z inną niesprawdzoną zawartością: $1"
 }

@@ -1,11 +1,16 @@
 import assert from "node:assert/strict";
+import { unzipSync, zipSync, strToU8 } from "fflate";
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import { browser, bridge } from "./browser.mjs";
 import { serve } from "./server.mjs";
 const server = await serve(),
   b = await browser();
 const results = [];
-const documentBytes = Array.from(await readFile("test/fixtures/contract.docx"));
+const documentParts = unzipSync(await readFile("test/fixtures/contract.docx"));
+documentParts["word/charts/_rels/chart1.xml.rels"] = strToU8(
+  '<Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships"><Relationship Id="chart" Target="mailto:chart@example.com"/></Relationships>',
+);
+const documentBytes = Array.from(zipSync(documentParts));
 await mkdir("qa/screens", { recursive: true });
 try {
   for (const file of (await readdir("locales")).filter(
@@ -47,6 +52,11 @@ try {
           assert(
             (await page.locator("#document-warnings").textContent()).includes(
               dict.docxImages.replace("$1", "2"),
+            ),
+          );
+          assert(
+            (await page.locator("#document-warnings").textContent()).includes(
+              dict.docxRelationships.replace("$1", "1"),
             ),
           );
           await page.locator("#copy").click();

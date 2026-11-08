@@ -481,7 +481,10 @@ export function scrubDocx(bytes, policy = {}) {
   const relationships = relationshipParts(doc);
   let rels = 0,
     keptMail = 0;
-  for (const name of relationships.handled) {
+  for (const name of [
+    ...relationships.handled,
+    ...relationships.unhandled,
+  ].sort()) {
     const xml = strFromU8(doc.parts[name]);
     const out = mapMailTargets(xml, (raw, index) => {
       const target = decode(raw);
@@ -491,41 +494,21 @@ export function scrubDocx(bytes, policy = {}) {
       } catch {
         throw new Error("Malformed DOCX mailto target encoding.");
       }
-      // URI separators are not email local-part characters in this context.
+      // Queries may carry arbitrary private text. Drop them in the shared document;
+      // the explicit mapping retains the original target for exact restoration.
       const question = payload.indexOf("?");
-      const segments = [
-        {
-          start: 0,
-          value: payload.slice(0, question < 0 ? payload.length : question),
-        },
-      ];
-      if (question >= 0)
-        for (const m of payload
-          .slice(question)
-          .matchAll(/[?&][^=&?]*=([^&]*)/g))
-          segments.push({
-            start: question + m.index + m[0].length - m[1].length,
-            value: m[1],
-          });
-      const manual = segments.flatMap((segment) =>
-        scrubText(segment.value, {
-          detectors: { ...detectors, email: true },
-        }).matches.map((m) => ({
-          start: segment.start + m.start,
-          end: segment.start + m.end,
-          category: m.category,
-        })),
+      const address = payload.slice(
+        0,
+        question < 0 ? payload.length : question,
       );
-      const cleaned = scrubText(payload, {
+      const cleaned = scrubText(address, {
         mapping: result.mapping,
-        detectors,
-        manual,
+        detectors: { ...detectors, email: true },
       });
       Object.assign(result.mapping.placeholders, cleaned.mapping.placeholders);
-      if (!cleaned.matches.length) {
-        if (!/^\[EMAIL_\d+\]$/.test(payload)) keptMail++;
-        return raw;
-      }
+      if (!cleaned.matches.length && !/^\[EMAIL_\d+\]$/.test(address))
+        keptMail++;
+      if (!cleaned.matches.length && question < 0) return raw;
       const value = encode(target.slice(0, 7) + cleaned.output)
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&apos;");
@@ -672,7 +655,7 @@ export function restoreDocx(bytes, mapping) {
       replaceXML({ ...model, nodes }, replacements),
     );
   }
-  for (const name of relationshipParts(doc).handled) {
+  for (const name of Object.values(relationshipParts(doc)).flat().sort()) {
     const xml = strFromU8(doc.parts[name]);
     doc.parts[name] = strToU8(
       mapMailTargets(xml, (raw, index) => {

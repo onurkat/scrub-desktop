@@ -119,5 +119,6 @@
   "docxReviewers": "Beibehaltene Prüfernamen: $1. Füge sie dem Wörterbuch hinzu.",
   "docxCleaned": "Metadaten zu Prüferkonten oder Dokumentautoren entfernt.",
   "docxGeneral": "Bilder, Objekte, Feldcodes, benutzerdefiniertes XML, Links und weitere Metadaten können noch private Daten enthalten. Vor dem Teilen prüfen.",
-  "saveAnyway": "Trotzdem speichern"
+  "saveAnyway": "Trotzdem speichern",
+  "docxRelationships": "Beziehungsdateien mit weiteren ungeprüften Inhalten: $1"
 }

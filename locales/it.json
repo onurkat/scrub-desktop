@@ -119,5 +119,6 @@
   "docxReviewers": "Nomi dei revisori conservati: $1. Aggiungili al dizionario.",
   "docxCleaned": "Metadati degli account dei revisori o degli autori rimossi.",
   "docxGeneral": "Immagini, oggetti, codici di campo, XML personalizzato, link e altri metadati possono ancora contenere dati privati. Controllali prima di condividere.",
-  "saveAnyway": "Salva comunque"
+  "saveAnyway": "Salva comunque",
+  "docxRelationships": "File di relazioni con altri contenuti non esaminati: $1"
 }

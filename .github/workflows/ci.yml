@@ -7,7 +7,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-14, windows-2022]
+        os: [ubuntu-24.04, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -27,7 +27,13 @@ jobs:
       - run: cargo clippy --manifest-path src-tauri/Cargo.toml --locked --all-targets -- -D warnings
       - name: Linux bundles
         if: runner.os == 'Linux'
-        run: npx tauri build --bundles appimage,deb
+        run: |
+          for attempt in 1 2 3 4; do
+            npx tauri build --bundles appimage,deb && exit 0
+            echo "Bundling attempt $attempt failed (tool download); retrying in 30 s"
+            sleep 30
+          done
+          exit 1
       - name: macOS application
         if: runner.os == 'macOS'
         run: npx tauri build --bundles app

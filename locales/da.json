@@ -121,5 +121,6 @@
   "docxGeneral": "Billeder, objekter, feltkoder, brugerdefineret XML, links og andre metadata kan stadig indeholde private data. Undersøg dem før deling.",
   "saveAnyway": "Gem alligevel",
   "docxRelationships": "Relationsfiler med andet ikke undersøgt indhold: $1",
-  "docxTargetsKept": "$1 relationsmål indeholder stadig @. Kontrollér før deling."
+  "docxTargetsKept": "$1 relationsmål indeholder stadig @. Kontrollér før deling.",
+  "docxTargetsReplaced": "Andre erstattede relationsmål: $1"
 }

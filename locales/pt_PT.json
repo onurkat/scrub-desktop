@@ -121,5 +121,6 @@
   "docxGeneral": "Imagens, objetos, códigos de campo, XML personalizado, ligações e outros metadados ainda podem conter dados privados. Inspecione antes de partilhar.",
   "saveAnyway": "Guardar na mesma",
   "docxRelationships": "Ficheiros de relações com outros conteúdos não inspecionados: $1",
-  "docxTargetsKept": "$1 destinos de relação ainda contêm @. Verifique antes de partilhar."
+  "docxTargetsKept": "$1 destinos de relação ainda contêm @. Verifique antes de partilhar.",
+  "docxTargetsReplaced": "Outros destinos de relação substituídos: $1"
 }

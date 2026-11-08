@@ -121,5 +121,6 @@
   "docxGeneral": "圖片、物件、功能變數代碼、自訂 XML、連結及其他中繼資料仍可能包含私人資料。請在分享前檢查。",
   "saveAnyway": "仍然儲存",
   "docxRelationships": "包含其他未檢查內容的關聯檔案：$1",
-  "docxTargetsKept": "$1 個關聯目標仍包含 @。分享前請檢查。"
+  "docxTargetsKept": "$1 個關聯目標仍包含 @。分享前請檢查。",
+  "docxTargetsReplaced": "已替換的其他關聯目標：$1"
 }

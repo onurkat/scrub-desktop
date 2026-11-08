@@ -128,3 +128,8 @@ AUDIT-010 UI verification completed: 340 localized views pass at 480/800 pixels;
 
 Engine synced from f35567d. XML-whitespace-prefixed mailto links are scrubbed; all other Word relationship targets apply email/dictionary detection, with a content-free retained-@ warning. `docxTargetsKept` translated in all 34 locales; locale validation: 123 keys. Node 20 passes 23/23 including warning adapter and upstream hash parity. Engine's 85-test suite includes generated targets, package-wide original searches, restored relationships and equivalent XML entity/whitespace representations.
 Node 22 also passes 23/23. Documents UI save/restore and dictionary CSV flow pass after sync; notices use the same translated adapter in CLI and Documents.
+
+### 1.0.3 / AUDIT-014
+
+Engine 1b2fca5 scans decoded URL path segments/query values separately, so encoded emails reuse body placeholders without absorbing URL delimiters. Exact raw relationship attribute restoration retains numeric XML whitespace references. Engine 88/88 includes encoded/literal equivalence, URL-decoded whole-package searches, exact relationship bytes and malformed escapes; frozen baselines unchanged. Web build passes.
+Desktop Node20/22 24/24, Rust 2/2, clippy and Documents save/restore pass. New other-target replacement count has its own key in all 34 languages (124 used keys); generic desktop warning already conservatively describes residual link content. Version 1.0.3 / MSIX 1.0.3.0, identity unchanged. No push or publication.

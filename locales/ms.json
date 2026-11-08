@@ -121,5 +121,6 @@
   "docxGeneral": "Imej, objek, kod medan, XML tersuai, pautan dan metadata lain mungkin masih mengandungi data peribadi. Periksa sebelum berkongsi.",
   "saveAnyway": "Simpan juga",
   "docxRelationships": "Fail hubungan dengan kandungan lain yang belum diperiksa: $1",
-  "docxTargetsKept": "$1 sasaran hubungan masih mengandungi @. Semak sebelum berkongsi."
+  "docxTargetsKept": "$1 sasaran hubungan masih mengandungi @. Semak sebelum berkongsi.",
+  "docxTargetsReplaced": "Sasaran hubungan lain yang diganti: $1"
 }

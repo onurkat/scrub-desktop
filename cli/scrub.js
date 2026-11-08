@@ -40,7 +40,7 @@ async function main() {
     return;
   }
   if (args.includes("--version")) {
-    console.log("1.0.2");
+    console.log("1.0.3");
     return;
   }
   const restoring = args[0] === "restore";

@@ -121,5 +121,6 @@
   "docxGeneral": "Kuvat, objektit, kenttäkoodit, mukautettu XML, linkit ja muut metatiedot voivat yhä sisältää yksityisiä tietoja. Tarkista ennen jakamista.",
   "saveAnyway": "Tallenna silti",
   "docxRelationships": "Suhdetiedostot, joissa on muuta tarkistamatonta sisältöä: $1",
-  "docxTargetsKept": "$1 suhdekohdetta sisältää yhä @-merkin. Tarkista ennen jakamista."
+  "docxTargetsKept": "$1 suhdekohdetta sisältää yhä @-merkin. Tarkista ennen jakamista.",
+  "docxTargetsReplaced": "Muut korvatut suhdekohteet: $1"
 }

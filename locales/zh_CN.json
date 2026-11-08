@@ -121,5 +121,6 @@
   "docxGeneral": "图片、对象、域代码、自定义 XML、链接及其他元数据仍可能包含隐私数据。请在分享前检查。",
   "saveAnyway": "仍然保存",
   "docxRelationships": "包含其他未检查内容的关系文件：$1",
-  "docxTargetsKept": "$1 个关系目标仍包含 @。分享前请检查。"
+  "docxTargetsKept": "$1 个关系目标仍包含 @。分享前请检查。",
+  "docxTargetsReplaced": "已替换的其他关系目标：$1"
 }

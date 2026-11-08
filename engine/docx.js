@@ -357,6 +357,37 @@ function mapRelationshipTargets(xml, transform) {
     },
   );
 }
+// Keep URL delimiters out of the email detector: otherwise a URL prefix can
+// become part of the email's canonical value. Unchanged components stay exact.
+function decodedURI(value) {
+  try { return decodeURIComponent(value); } catch { return value; }
+}
+function scrubTargetURL(target, clean) {
+  try { new URL(target, "https://scrub.invalid/"); } catch { return clean(target); }
+  const hash = target.indexOf("#");
+  const fragment = hash < 0 ? "" : target.slice(hash);
+  const main = hash < 0 ? target : target.slice(0, hash);
+  const question = main.indexOf("?");
+  const path = question < 0 ? main : main.slice(0, question);
+  const prefix = /^(?:[a-z][a-z0-9+.-]*:)?\/\/[^/]*/i.exec(path)?.[0] ||
+    /^[a-z][a-z0-9+.-]*:/i.exec(path)?.[0] || "";
+  const component = (raw) => {
+    const decoded = decodedURI(raw), output = clean(decoded);
+    if (output === decoded) return raw;
+    return encodeURIComponent(output).replace(/%5B([A-Z]+_\d+)%5D/g, "[$1]");
+  };
+  const pathname = path.slice(prefix.length).split("/").map(component).join("/");
+  const query = question < 0 ? "" : "?" + main.slice(question + 1).split("&").map(pair => {
+    const equal = pair.indexOf("=");
+    return equal < 0 ? component(pair) : pair.slice(0, equal + 1) + component(pair.slice(equal + 1));
+  }).join("&");
+  return prefix + pathname + query + (fragment ? "#" + component(fragment.slice(1)) : "");
+}
+function restoreTargetAttribute(raw) {
+  // Retain original entity spelling while preventing literal attribute delimiters
+  // and XML whitespace normalisation (including mappings from earlier releases).
+  return raw.replace(/["'<>\t\n\r]/g, c => ({'"':'&quot;',"'":'&apos;','<':'&lt;','>':'&gt;','\t':'&#x9;','\n':'&#xA;','\r':'&#xD;'}[c]));
+}
 export function scrubDocx(bytes, policy = {}) {
   const doc = loadDocx(bytes),
     result = scrubText(doc.text, policy);
@@ -480,7 +511,7 @@ export function scrubDocx(bytes, policy = {}) {
   // Handle mail targets of every inspected part, including nested glossary relationships.
   const relationships = relationshipParts(doc);
   let rels = 0,
-    keptMail = 0, keptTargets = 0;
+    keptMail = 0, keptTargets = 0, otherTargets = 0, hasOtherURL = false;
   for (const name of [
     ...relationships.handled,
     ...relationships.unhandled,
@@ -490,15 +521,22 @@ export function scrubDocx(bytes, policy = {}) {
       const decoded = decode(raw);
       const target = decoded.replace(/^[ \t\r\n]+|[ \t\r\n]+$/g, "");
       if (mailIndex < 0) {
-        const cleaned = scrubText(decoded, {
-          mapping: result.mapping,
-          detectors: { ...detectors, email: true },
-          dictionary: policy.dictionary,
+        hasOtherURL ||= /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i.test(target);
+        let changed = false;
+        const output = scrubTargetURL(decoded, text => {
+          const cleaned = scrubText(text, {
+            mapping: result.mapping,
+            detectors: { ...detectors, email: true },
+            dictionary: policy.dictionary,
+          });
+          Object.assign(result.mapping.placeholders, cleaned.mapping.placeholders);
+          changed ||= cleaned.matches.length > 0;
+          return cleaned.output;
         });
-        Object.assign(result.mapping.placeholders, cleaned.mapping.placeholders);
-        if (cleaned.output.includes("@")) keptTargets++;
-        if (!cleaned.matches.length) return raw;
-        const value = encode(cleaned.output).replace(/"/g, "&quot;").replace(/'/g, "&apos;");
+        if (decodedURI(output).includes("@") || /%40/i.test(output)) keptTargets++;
+        if (!changed) return raw;
+        otherTargets++;
+        const value = encode(output).replace(/"/g, "&quot;").replace(/'/g, "&apos;");
         (result.mapping.docxRelationships ||= []).push({part: name, targetIndex: index, outputHash: textHash(value), value: raw});
         return value;
       }
@@ -547,6 +585,7 @@ export function scrubDocx(bytes, policy = {}) {
       keptMail +
         " mailto: hyperlink targets kept (unrecognised addresses; inspect before sharing)",
     );
+  if (otherTargets) skipped.push(otherTargets + " non-mailto relationship targets replaced with placeholders");
   if (keptTargets) skipped.push(keptTargets + " relationship targets containing @ kept (inspect before sharing)");
   if (relationships.unhandled.length)
     skipped.push(
@@ -592,7 +631,9 @@ export function scrubDocx(bytes, policy = {}) {
   if (doc.models.some((m) => m.tracked))
     skipped.push("tracked changes present; deleted text also inspected");
   skipped.push(
-    "Image text, embedded objects, custom XML, non-mailto hyperlink targets, and document properties other than creator/last-modified-by are not anonymised. Inspect these before sharing.",
+    hasOtherURL || otherTargets || keptTargets
+      ? "Image text, embedded objects, custom XML, unrecognised relationship target content, and document properties other than creator/last-modified-by are not anonymised. Inspect these before sharing."
+      : "Image text, embedded objects, custom XML, non-mailto hyperlink targets, and document properties other than creator/last-modified-by are not anonymised. Inspect these before sharing.",
   );
   result.report.skipped = skipped;
   return { ...result, output: pack(doc.parts), outputText: result.output };
@@ -681,9 +722,7 @@ export function restoreDocx(bytes, mapping) {
             v.outputHash === textHash(raw),
         );
         if (saved)
-          return encode(decode(saved.value))
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&apos;");
+          return restoreTargetAttribute(saved.value);
         const restored = restoreDetailed(decode(raw), mapping);
         restored.unknown.forEach((p) => unknown.add(p));
         return restored.output === decode(raw)

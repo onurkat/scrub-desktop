@@ -121,5 +121,6 @@
   "docxGeneral": "Bilder, Objekte, Feldcodes, benutzerdefiniertes XML, Links und weitere Metadaten können noch private Daten enthalten. Vor dem Teilen prüfen.",
   "saveAnyway": "Trotzdem speichern",
   "docxRelationships": "Beziehungsdateien mit weiteren ungeprüften Inhalten: $1",
-  "docxTargetsKept": "$1 Beziehungsziele enthalten noch @. Vor dem Teilen prüfen."
+  "docxTargetsKept": "$1 Beziehungsziele enthalten noch @. Vor dem Teilen prüfen.",
+  "docxTargetsReplaced": "Andere ersetzte Beziehungsziele: $1"
 }

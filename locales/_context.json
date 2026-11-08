@@ -122,5 +122,6 @@
   "docxGeneral": "Images, objects, field codes, custom XML, links and other metadata may still contain private data. Inspect before sharing.",
   "saveAnyway": "Save anyway",
   "docxRelationships": "Relationship files with other uninspected content: $1",
-  "docxTargetsKept": "$1 relationship targets still contain @. Inspect before sharing."
+  "docxTargetsKept": "$1 relationship targets still contain @. Inspect before sharing.",
+  "docxTargetsReplaced": "Other relationship targets replaced: $1"
 }

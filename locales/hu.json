@@ -121,5 +121,6 @@
   "docxGeneral": "A képek, objektumok, mezőkódok, egyéni XML, hivatkozások és más metaadatok még tartalmazhatnak magánadatokat. Megosztás előtt ellenőrizze őket.",
   "saveAnyway": "Mentés mindenképpen",
   "docxRelationships": "Egyéb, nem ellenőrzött tartalmú kapcsolatfájlok: $1",
-  "docxTargetsKept": "$1 kapcsolatcél még tartalmaz @ jelet. Megosztás előtt ellenőrizze."
+  "docxTargetsKept": "$1 kapcsolatcél még tartalmaz @ jelet. Megosztás előtt ellenőrizze.",
+  "docxTargetsReplaced": "Egyéb lecserélt kapcsolatcélok: $1"
 }

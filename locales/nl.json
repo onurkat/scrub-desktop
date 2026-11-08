@@ -121,5 +121,6 @@
   "docxGeneral": "Afbeeldingen, objecten, veldcodes, aangepaste XML, links en andere metagegevens kunnen nog privégegevens bevatten. Controleer vóór het delen.",
   "saveAnyway": "Toch opslaan",
   "docxRelationships": "Relatiebestanden met overige niet-gecontroleerde inhoud: $1",
-  "docxTargetsKept": "$1 relatiedoelen bevatten nog @. Controleer vóór het delen."
+  "docxTargetsKept": "$1 relatiedoelen bevatten nog @. Controleer vóór het delen.",
+  "docxTargetsReplaced": "Andere vervangen relatiedoelen: $1"
 }

@@ -40,7 +40,7 @@ try {
     rows.push(row + "</div></section>");
   }
   await page.setContent(
-    `<style>body{font:16px system-ui;margin:24px;background:#eee}main{display:flex;gap:32px;align-items:center}section{padding:20px;border-radius:12px;width:340px}h2{font-size:16px}section div{display:flex;gap:32px;align-items:center;height:44px}.light{background:white;color:black}.dark{background:#202124;color:white}article{display:flex;gap:20px}</style><h1>Scrub 1.0.2 · brand assets</h1><main>${await img("src-tauri/icons/brand-1024.png", 128)}<p>1024 px source<br>Green #225a43<br>Lime #d6e89c</p></main><article>${rows.join("")}</article>`,
+    `<style>body{font:16px system-ui;margin:24px;background:#eee}main{display:flex;gap:32px;align-items:center}section{padding:20px;border-radius:12px;width:340px}h2{font-size:16px}section div{display:flex;gap:32px;align-items:center;height:44px}.light{background:white;color:black}.dark{background:#202124;color:white}article{display:flex;gap:20px}</style><h1>Scrub 1.0.3 · brand assets</h1><main>${await img("src-tauri/icons/brand-1024.png", 128)}<p>1024 px source<br>Green #225a43<br>Lime #d6e89c</p></main><article>${rows.join("")}</article>`,
   );
   await page.screenshot({ path: "qa/screens/brand-icons.png" });
 } finally {

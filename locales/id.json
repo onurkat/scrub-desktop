@@ -121,5 +121,6 @@
   "docxGeneral": "Gambar, objek, kode bidang, XML khusus, tautan, dan metadata lain mungkin masih berisi data pribadi. Periksa sebelum berbagi.",
   "saveAnyway": "Tetap simpan",
   "docxRelationships": "File relasi dengan konten lain yang belum diperiksa: $1",
-  "docxTargetsKept": "$1 target relasi masih berisi @. Periksa sebelum berbagi."
+  "docxTargetsKept": "$1 target relasi masih berisi @. Periksa sebelum berbagi.",
+  "docxTargetsReplaced": "Target relasi lain yang diganti: $1"
 }

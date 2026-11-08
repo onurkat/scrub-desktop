@@ -76,3 +76,7 @@ test('uninspected-owner relationships have a dedicated translated category', () 
 test('retained at-sign targets have a dedicated content-free warning', () => {
   assert.deepEqual(docxWarnings(['2 relationship targets containing @ kept (inspect before sharing)']), [['docxTargetsKept', 2]]);
 });
+
+test('other relationship replacements are distinct from mail links', () => {
+  assert.deepEqual(docxWarnings(['3 non-mailto relationship targets replaced with placeholders']), [['docxTargetsReplaced', 3]]);
+});

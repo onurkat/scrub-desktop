@@ -69,7 +69,7 @@ Install the local npm package without publishing:
 
 ```sh
 npm pack
-npm install --global ./onurkat-scrub-1.0.2.tgz
+npm install --global ./onurkat-scrub-1.0.3.tgz
 ```
 
 Scrub a prompt before passing it to a terminal agent (the final `claude` command, not Scrub, sends the scrubbed text):

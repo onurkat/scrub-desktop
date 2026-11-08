@@ -121,5 +121,6 @@
   "docxGeneral": "Hình ảnh, đối tượng, mã trường, XML tùy chỉnh, liên kết và siêu dữ liệu khác vẫn có thể chứa dữ liệu riêng tư. Kiểm tra trước khi chia sẻ.",
   "saveAnyway": "Vẫn lưu",
   "docxRelationships": "Tệp quan hệ có nội dung khác chưa được kiểm tra: $1",
-  "docxTargetsKept": "$1 đích quan hệ vẫn chứa @. Kiểm tra trước khi chia sẻ."
+  "docxTargetsKept": "$1 đích quan hệ vẫn chứa @. Kiểm tra trước khi chia sẻ.",
+  "docxTargetsReplaced": "Các đích quan hệ khác đã thay thế: $1"
 }

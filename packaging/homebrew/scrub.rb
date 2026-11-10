@@ -1,8 +1,8 @@
 class Scrub < Formula
   desc "Private reversible text and document anonymisation"
   homepage "https://github.com/onurkat/scrub-desktop"
-  url "https://github.com/onurkat/scrub-desktop/releases/download/v1.0.3/scrub-desktop-1.0.3-source.tar.gz"
-  sha256 "14ba1bb0589f38d8bbc3d3b9a87891f5e8b599dfd1829101735d19c770fdff1b"
+  url "https://github.com/onurkat/scrub-desktop/releases/download/v1.0.4/scrub-desktop-1.0.4-source.tar.gz"
+  sha256 "9be3cbf27b509aa408d5341c84c7b80d455b42b0c02f4cac91feb63c5c4000b5"
   license "GPL-3.0-or-later"
   depends_on "node"
 

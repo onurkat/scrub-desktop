@@ -6,7 +6,7 @@ const archive = resolve(".artifacts/source.tar.gz");
 execFileSync("git", [
   "archive",
   "--format=tar.gz",
-  "--prefix=scrub-desktop-1.0.3/",
+  "--prefix=scrub-desktop-1.0.4/",
   "-o",
   archive,
   "HEAD",
@@ -27,7 +27,7 @@ for (const name of ["scrub", "scrub-desktop"]) {
       .replace(/^  (sha256|version) .+\n/gm, "")
       .replace(
         /  url .+/,
-        `  url "file://${archive}"\n  version "1.0.3"\n  sha256 "${sha}"`,
+        `  url "file://${archive}"\n  version "1.0.4"\n  sha256 "${sha}"`,
       ),
   );
 }

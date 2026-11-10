@@ -114,10 +114,11 @@ export async function hookMain(args) {
       if (error.code !== "ENOENT") throw error;
     }
     const next = mergeHooks(settings, target, action === "install");
-    if (JSON.stringify(next) !== JSON.stringify(settings))
+    const changed = JSON.stringify(next) !== JSON.stringify(settings);
+    if (changed)
       await atomicPrivate(file, JSON.stringify(next, null, 2) + "\n");
     process.stdout.write(
-      `Scrub hook ${action === "install" ? "installed" : "removed"} (${flags[0] === "--user" ? "user" : "project"}).\n`,
+      `Scrub hook ${action === "install" ? (changed ? "installed" : "already installed") : "removed"} (${flags[0] === "--user" ? "user" : "project"}).\n`,
     );
     return 0;
   } catch {

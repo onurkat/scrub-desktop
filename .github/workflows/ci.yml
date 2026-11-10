@@ -4,10 +4,11 @@ permissions:
   contents: read
 jobs:
   build:
+    name: install-smoke (${{ matrix.os }})
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-24.04, macos-latest, windows-latest]
+        os: [ubuntu-24.04, ubuntu-24.04-arm, macos-latest, windows-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -36,7 +37,9 @@ jobs:
           exit 1
       - name: macOS application
         if: runner.os == 'macOS'
-        run: npx tauri build --bundles app
+        run: |
+          rustup target add x86_64-apple-darwin aarch64-apple-darwin
+          npx tauri build --target universal-apple-darwin --bundles app
       - name: Windows executable
         if: runner.os == 'Windows'
         run: npx tauri build --no-bundle
@@ -66,6 +69,26 @@ jobs:
           Set-Clipboard -Value 'previous-clipboard'
           ./packaging/msstore/build.ps1 -TestInstall
           if ((Get-Clipboard -Raw).TrimEnd() -ne 'previous-clipboard') { throw 'Clipboard was not restored' }
+      - name: Package self-contained CLI and installer assets
+        run: |
+          node tools/package-cli.mjs
+          node tools/package-install.mjs
+      - name: install-smoke Linux (dash and bash)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get install -y shellcheck
+          shellcheck packaging/install/install.sh
+          sh -n packaging/install/install.sh
+          INSTALL_SHELL=dash xvfb-run -a node tools/qa/install-smoke.mjs
+          INSTALL_SHELL=bash xvfb-run -a node tools/qa/install-smoke.mjs
+      - name: install-smoke macOS and Windows
+        if: runner.os != 'Linux'
+        run: node tools/qa/install-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-${{ matrix.os }}
+          path: .artifacts/install-assets/
+          if-no-files-found: error
       - uses: actions/upload-artifact@v4
         with:
           name: scrub-${{ matrix.os }}
@@ -78,3 +101,54 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: docker://rhysd/actionlint:1.7.12
+  cli-additional-architectures:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-15-intel, windows-11-arm]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: node tools/package-cli.mjs
+      - name: Package CLI only
+        env:
+          SCRUB_PACKAGE_CLI_ONLY: "1"
+        run: node tools/package-install.mjs
+      - name: CLI install smoke
+        env:
+          SCRUB_SMOKE_CLI_ONLY: "1"
+        run: node tools/qa/install-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: install-${{ matrix.os }}
+          path: .artifacts/install-assets/
+          if-no-files-found: error
+  release-assets:
+    needs: [build, cli-additional-architectures]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: install-*
+          path: .artifacts/release
+          merge-multiple: true
+      - run: node tools/archive-source.mjs .artifacts/release
+      - name: Aggregate checksums (no publication)
+        run: |
+          cd .artifacts/release
+          rm SHA256SUMS
+          sha256sum * > SHA256SUMS
+          sha256sum --check SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: scrub-release-assets
+          path: .artifacts/release/
+          if-no-files-found: error

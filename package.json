@@ -1,6 +1,6 @@
 {
   "name": "@onurkat/scrub",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Private, reversible text and document anonymisation for desktop and terminal workflows",
   "type": "module",
   "license": "GPL-3.0-or-later",
@@ -30,7 +30,9 @@
   "devDependencies": {
     "@tauri-apps/cli": "2.12.4",
     "axe-core": "4.14.0",
+    "esbuild": "0.25.12",
     "playwright-core": "1.65.0",
+    "postject": "1.0.0-alpha.6",
     "prettier": "3.9.10"
   }
 }

@@ -57,7 +57,7 @@ export async function bridge(page) {
               return {
                 settings: q.settings,
                 mappings: q.store,
-                version: "1.0.3",
+                version: "1.0.4",
                 wayland: false,
               };
             case "frontend_ready":

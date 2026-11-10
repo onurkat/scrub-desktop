@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { loadLocale } from "./locale.js";
 import { hookMain } from "./hooks.js";
 import { docxWarnings } from "./docx-warnings.js";
 import { readFile } from "node:fs/promises";
@@ -40,7 +41,7 @@ async function main() {
     return;
   }
   if (args.includes("--version")) {
-    console.log("1.0.3");
+    console.log("1.0.4");
     return;
   }
   const restoring = args[0] === "restore";
@@ -184,12 +185,7 @@ async function main() {
       for (const candidate of [code, code.split("_")[0], "en"]) {
         if (!/^[a-z]{2}(?:_[A-Z]{2})?$/.test(candidate)) continue;
         try {
-          locale = JSON.parse(
-            await readFile(
-              new URL(`../locales/${candidate}.json`, import.meta.url),
-              "utf8",
-            ),
-          );
+          locale = await loadLocale(candidate);
           break;
         } catch (error) {
           if (error.code !== "ENOENT") throw error;

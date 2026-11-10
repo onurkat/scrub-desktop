@@ -12,7 +12,37 @@ Use **New conversation** to start a fresh mapping. Otherwise later scrubs reuse 
 
 Dictionary terms and aliases use the same CSV format as the Scrub extension. Documents accepts DOCX, TXT, CSV and Markdown, lets you review replacements, and saves a separate copy. Export a mapping JSON if you need to restore that document later; treat it as sensitive because it contains the original values.
 
-## Install or build
+## Install
+
+macOS / Linux (per-user; no Node installation needed):
+
+```sh
+curl -fsSL https://www.onurkat.com/scrub/install.sh | sh
+```
+
+Windows desktop:
+
+```powershell
+winget install --id 9PJ0NKMT45S4 --source msstore
+```
+
+CLI only:
+
+```sh
+curl -fsSL https://www.onurkat.com/scrub/install.sh | sh -s -- --cli-only
+```
+
+Windows CLI: `irm https://www.onurkat.com/scrub/install.ps1 | iex`.
+
+Inspect the script first:
+
+```sh
+curl -fsSLO https://www.onurkat.com/scrub/install.sh && less install.sh && sh install.sh
+```
+
+The installer downloads GitHub release assets and verifies SHA256SUMS before installing. It pins version 1.0.4 by default; pass `--version X.Y.Z` or explicitly `--version latest`. `--dry-run` prints the plan, `--with-claude-code` installs the user prompt hook, and `--uninstall` removes managed files while retaining your settings and mappings. `--system` uses apt on Debian/Ubuntu, or /Applications on macOS. Default installs use ~/.local on Linux and ~/Applications on macOS; add ~/.local/bin to PATH if prompted. macOS binaries are ad-hoc signed, not notarized. Windows CLI options use PowerShell spelling (`-Version`, `-DryRun`, `-WithClaudeCode`, `-Uninstall`).
+
+### Other ways to install
 
 - **macOS:** `brew install onurkat/scrub/scrub-desktop` (built from source on your Mac, see below).
 - **Linux:** AppImage and .deb on the [releases page](https://github.com/onurkat/scrub-desktop/releases/latest).
@@ -69,7 +99,7 @@ Install the local npm package without publishing:
 
 ```sh
 npm pack
-npm install --global ./onurkat-scrub-1.0.3.tgz
+npm install --global ./onurkat-scrub-1.0.4.tgz
 ```
 
 Scrub a prompt before passing it to a terminal agent (the final `claude` command, not Scrub, sends the scrubbed text):

@@ -94,6 +94,7 @@ jobs:
           name: scrub-${{ matrix.os }}
           path: |
             src-tauri/target/release/bundle/
+            src-tauri/target/universal-apple-darwin/release/bundle/
             .artifacts/Scrub-unsigned.msix
           if-no-files-found: error
   workflow-lint:

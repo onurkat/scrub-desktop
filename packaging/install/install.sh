@@ -28,7 +28,7 @@ main() (
   # A manifest can only name these owned files, never arbitrary user data.
   valid_path() {
     case $1 in
-      "$bin/scrub"|"$bin/scrub-desktop"|"$app"|"$HOME/Applications/Scrub.app"|/Applications/Scrub.app|"$HOME/.local/share/applications/scrub.desktop"|"$HOME/.local/share/icons/hicolor/128x128/apps/scrub.png"|deb:scrub-desktop|hook:claude-code) return 0;;
+      "$bin/scrub"|"$bin/scrub-desktop"|"$app"|"$HOME/Applications/Scrub.app"|/Applications/Scrub.app|"$HOME/.local/share/applications/scrub.desktop"|"$HOME/.local/share/icons/hicolor/128x128/apps/scrub.png"|deb:scrub|hook:claude-code) return 0;;
       *) return 1;;
     esac
   }
@@ -45,7 +45,7 @@ main() (
       printf 'Remove %s\n' "$path"
       [ "$dry" = 0 ] || continue
       case $path in
-        hook:*) ;; deb:scrub-desktop) sudo apt remove -y scrub-desktop;;
+        hook:*) ;; deb:scrub) sudo apt remove -y scrub;;
         /Applications/Scrub.app) rm -rf -- "$path" || sudo rm -rf -- "$path";;
         *) rm -rf -- "$path";;
       esac
@@ -56,8 +56,8 @@ main() (
   fi
   if [ "$system" = 1 ] && [ "$os" = Linux ] && [ "$cli_only" = 0 ]; then
     command -v apt >/dev/null || fail "--system requires Debian/Ubuntu. See $manual"
-    if dpkg-query -W -f='${Status}' scrub-desktop 2>/dev/null | grep -q 'install ok installed'; then
-      if [ ! -f "$manifest" ] || ! grep -Fxq deb:scrub-desktop "$manifest"; then
+    if dpkg-query -W -f='${Status}' scrub 2>/dev/null | grep -q 'install ok installed'; then
+      if [ ! -f "$manifest" ] || ! grep -Fxq deb:scrub "$manifest"; then
         fail 'An unmanaged Debian installation exists; use apt to manage it.'
       fi
     fi
@@ -131,7 +131,7 @@ main() (
       own "$HOME/.local/share/icons/hicolor/128x128/apps/scrub.png"
       # Icon is also a checksum-covered asset.
       verify scrub.png
-    else own deb:scrub-desktop; fi
+    else own deb:scrub; fi
   fi
   sort -u "$stage/new-manifest" > "$manifest"
   mkdir -p "$bin"

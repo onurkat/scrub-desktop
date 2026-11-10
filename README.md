@@ -16,7 +16,7 @@ Dictionary terms and aliases use the same CSV format as the Scrub extension. Doc
 
 - **macOS:** `brew install onurkat/scrub/scrub-desktop` (built from source on your Mac, see below).
 - **Linux:** AppImage and .deb on the [releases page](https://github.com/onurkat/scrub-desktop/releases/latest).
-- **Windows:** Microsoft Store (coming soon) or build from source.
+- **Windows:** [Microsoft Store](https://apps.microsoft.com/detail/9PJ0NKMT45S4) or build from source.
 - **CLI:** `brew install onurkat/scrub/scrub`.
 
 ### From source
@@ -47,7 +47,7 @@ The app runs in the menu bar without a Dock icon. It does not synthesize keystro
 
 ### Windows
 
-Install the owner-published Scrub listing from Microsoft Store once available. The unsigned MSIX built here is for Store submission, not a signed public installer. CI creates a separate temporary self-signed copy solely to test installation and the packaged executable. Scrub stays in the notification area; click its icon to open the window.
+Install Scrub from the [Microsoft Store](https://apps.microsoft.com/detail/9PJ0NKMT45S4). The unsigned MSIX built here is for Store submission, not a signed public installer. CI creates a separate temporary self-signed copy solely to test installation and the packaged executable. Scrub stays in the notification area; click its icon to open the window.
 
 ### Linux
 
